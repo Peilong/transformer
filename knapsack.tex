@@ -1,0 +1,188 @@
+\subsection{Combining Accelerators}
+\label{subsec_combo}
+
+
+
+Combining acceleration functions to maximize the utilization of reconfigurable logics
+allows more effective speedup and power savings.
+
+As each accelerator function consumes a certain amount of
+on-chip resources such as LUT, memory, and data access
+bandwidth to achieve a particular speedup factor, as shown in Table
+\ref{tbl_benchmark}, the choice of accelerators to maximize gains
+under resource constraint is a combinatorial optimization problem, i.e.
+knapsack problem. We will discuss two variants of knapsack problem
+applicable in our accelerator scheduling algorithm: one is 0-1
+knapsack problem, i.e., an acceleration function is either chosen or not
+chosen;  the other is bounded knapsack problem: up to $n$ copies of
+the same acceleration function can be instantiated as independent
+engines into the accelerator. With the total resource available to the programmable accelerator as
+a constraint, we consider two different prioritization strategies to minimize the
+execution time: memory bandwidth utilization first and acceleration
+speedup first when solving the knapsack problems.
+
+\subsubsection{Mathematical Model}
+
+We model an accelerator function as $A(SLICE, DSP, BRAM, Bandwidth, Speedup)$,
+where {\em SLICE, DSP, BRAM} are logic, application-specific blocks and
+memory cells resources, respectively, consumed by the function when it is
+instantiated in the reconfigurable logic unit. {\em Bandwidth} is the
+requirement of the function on data bus in order to keep the unit
+busy. {\em Speedup} is the effective speedup of an accelerated function on the
+reconfigurable logic compared to its software implementation. 
+
+\begin{table*}[ht]
+\scriptsize
+\centering
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline 
+\textbf{Accelerators}& \textbf{SLICE} & \textbf{SLICE \%} & \textbf{FF} & \textbf{FF \%} & \textbf{LUT} & \textbf{LUT \%} & \textbf{BRAM} & \textbf{BRAM \%} & \textbf{Bandwidth MB/s} & \textbf{Speedup} & \textbf{Power W} \\ 
+\hline
+\hline  
+3DES          & 1148  & 24.7  & 807  & 8.7  & 1081 & 11.6  & 8    & 40   & 392   & 25.2     & 0.157\\ 
+\hline 
+IDSI          & 1637  & 35.2  & 530  & 5.7  & 891  & 9.6   & 0    & 0    & 970   & 13.1     & 0.235\\ 
+\hline 
+SLAM-C        & 812   & 17.4  & 973  & 10.4 & 854  & 9.2   & 0    & 0    & 479   & 33.0     & 0.156\\ 
+\hline 
+SLAM-J        & 983   & 21.1  & 1027 & 11.1 & 872  & 9.4   & 0    & 0    & 458   & 29.0     & 0.147\\ 
+\hline 
+SURF          & 1877  & 40.3  & 1163 & 12.5 & 705  & 7.6   & 5    & 25   & 983   & 25.0     & 0.161\\ 
+\hline 
+Segmentation  & 2918  & 62.7  & 930  & 10.0 & 630  & 6.8   & 12   & 60   & 848   & 45.5     & 0.178\\ 
+\hline 
+SmithWaterman & 626   & 13.4  & 1285 & 13.8 & 1034 & 11.1  & 20   & 100  & 403   & 36.6     & 0.182\\ 
+\hline 
+Jacobi        & 1201  & 25.8  & 1431 & 15.4 & 1218 & 13.1  & 2    & 10   & 1112  & 30.6     & 0.153\\ 
+\hline 
+
+\end{tabular} 
+\caption{Benchmark accelerator logic cost, bandwidth, speedup and
+  power. {\em (Use Xilinx SPARTAN 3E as the reference)}} 
+\label{tbl_benchmark}
+\end{center}
+\end{table*}
+
+Table \ref{tbl_benchmark} summarizes the library functions under
+study. These functions (explained in detail in \cite{accstore}) are
+representative time-consuming workloads in a wide range of application
+domains.  In this table, all data (except bandwidth consumption and
+speedup) are derived from the open source synthesizable accelerator
+store \cite{accstore}. We measure their memory bandwidth with Intel
+VTune Amplifier XE \cite{vtune}. The speedup of each accelerator is
+calculated by dividing execution time of one iteration of the software
+benchmark on a 1.6GHz single core by its corresponding hardware design
+on a 200MHz FPGA. {\em Transformer} applies Xilinx Spartan-3E XC3S500E
+FPGA \cite{spartan3e} as a reference on-chip accelerator, which has a
+comparable number of transistors ({$100\sim300$ million (500K gates)})
+as eight Atom 330 cores ({$\sim 47$ million per core})
+\cite{atom-spec}. The total number of SLICE on chip is 4656, LUT is
+9312, FF is 9312, DSP48 is 768 and BRAM is 20. We also show the
+percentage of resource consumption of each acceleration function. It
+can be observed that the numbers of SLICEs and BRAMs are two major
+resource constraints.  Therefore, we reduce the multi-dimensional
+knapsack problem to a two-dimension problem. That is, we consider the
+percentage of SLICEs and BRAMs of each benchmark as the two weights in
+the knapsack model. The memory bandwidth utilization and speedup are
+regarded as two objective functions for reducing the total execution
+time of memory-bound and compute-bound applications, respectively.
+
+In the memory bandwidth-first combination, we attempt to maximize the
+total bandwidth $\sum_{i=0}^{n}(BW_i \times Acc_i) $ subject to
+$\sum_{i=0}^{n}(w_i \times Acc_i) $, where $Acc_i$ $i \in {1,2,3,
+  ... ,n}$ denotes different accelerator functions, $BW_i$ being the
+bandwidth cost and $w_i$ being their weight, i.e. the SLICE resource
+demand. In the speedup-first combination selection, we focus our
+efforts on maximize the speedup metrics $\sum_{i=0}^{n}(SP_i) $, where
+$SP_i , i \in {1,2,3, \ldots, n}$ denotes the speedup of each
+accelerator. We attempt to maximize the two metrics because improving
+the system bandwidth utilization and choosing a function with
+significant speedup are two main approaches to improve the system
+performance. For example, our experiment results shows that if we
+offload memory-bound benchmarks such as IDSI, SURF, Segmentation and
+Jacobi to reconfigurable logics with higher memory bandwidth, we can
+expect better overall performance and power efficiency. These
+heuristics are shown to be effective through extensive experiments
+described in Section \ref{sec_perf}.
+
+\subsubsection{Dynamic Programming}
+
+Both two-constraint 0-1 knapsack problem and two-constraint bounded knapsack problem can be solved
+by dynamic programming. 
+
+\noindent{\em 0-1 Knapsack Problem Solution}
+
+Assume we have $n$ acceleration functions to choose from, which are
+annotated as $Acc_1$, $Acc_2$, \ldots, $Acc_n$. All $n$ items have
+their two-constraint weight $a_i$, $b_i$ and value $v_i$, $i \in [1,
+  2, \ldots, n]$. Then we define $V[i, a, b]$ to be the current
+maximum value we can obtain with a weight less than or equal to $a$
+and $b$ using first $i$ accelerators. The upper limit of two weights
+are $A$ and $B$. We derive recursive equations for $V[i, a, b]$:
+
+\begin{equation}
+V[i, a, b] = V[i-1, a, b] \quad \text{if} \quad a_i > a, b_i > b,
+\end{equation}
+meaning if adding a new accelerator exceeds the current
+two-dimensional weight limit, then we shall not choose the new
+accelerator and the total value will not change, and
+\begin{equation}
+\begin{array}{c}
+	V[i, a, b] = max(V[i-1, a, b], V[i-1, a - a_i, b - b_i] + V[i, a, b])\\
+	\text{if} \quad a_i \leq a \quad b_i \leq b.
+\end{array}
+\end{equation}
+
+Algorithm \ref{alg:0-1-knapsack} describes how we solve two-constraint 0-1
+knapsack problem to select a set of accelerator functions. 
+
+\begin{algorithm}[htb]
+\scriptsize
+\caption{ 0-1 Knapsack Problem Solution}
+\label{alg:0-1-knapsack}
+\begin{algorithmic}[1] 
+\FOR {each $a \in [0, A]$}
+	\FOR {each $b \in [0, B]$}
+    	\STATE $ V[a, b] = 0; $
+    \ENDFOR
+\ENDFOR
+\FOR {each $i \in [1, n]$ } 
+    \FOR {each $a \in [A, a_i]$ }
+    	\FOR {each $b \in [B, b_i]$}
+    	
+        	\IF {$j \geq w[i]$}
+            	\STATE $V[i, a, b] = max(V[i-1, a, b], V[i-1, a - a_i, b - b_i] + v[i, a, b]) $
+        	\ELSE
+            	\STATE $V[i, a, b] = V[i-1, a, b]$
+        	\ENDIF
+        \ENDFOR
+    \ENDFOR
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+\noindent{\em Bounded Knapsack Problem}
+
+The two-constraint bounded knapsack problem can be solved in a similar
+way as 0-1 knapsack problem. Using two extra annotations, $C$ as the
+maximum number of acceleration function we can request for a certain
+function, and $k_i$ as the number of functions $i$ we choose, we can
+derive a similar recursive equation for $V[i, w]$.
+
+\begin{equation}
+V[i, a, b] = V[i-1, a, b] \quad \text{if} \quad a_i > a, b_i > b
+\end{equation}
+
+and
+
+\begin{equation}
+	\begin{array}{c}
+		V[i, a, b] = max(V[i-1, a, b], V[i-1, a - k_i\times a_i, b - k_i\times b_i] \\
+		+ k_i\times V[i, a, b])\\
+		\text{if} \quad a_i \leq a \quad b_i \leq b
+	\end{array}
+\end{equation}
+
+The algorithm for bounded knapsack problem is similar to Algorithm
+\ref{alg:0-1-knapsack}, thus not elaborated due to space limit.

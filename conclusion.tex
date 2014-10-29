@@ -1,0 +1,42 @@
+\section{Conclusion}
+\label{sec_concl}
+
+In this paper, we propose a heterogeneous architecture {\em
+  Transformer} with an on-chip, partial reconfigurable logic to
+transparently accelerate dynamic unpredictable workloads.
+Reconfiguration controller and middleware are introduced to trace the
+run-time demands of the accelerator functions and invoke acceleration
+path. We derive two scheduling algorithms based on solving Knapsack
+problem to combine accelerators. We model the details of
+accelerators in a modified Multi2sim simulator and evaluate the
+performance and power efficiency of {\em Transformer} with synthetic
+workloads from a wide range of domains. The performance and power
+efficiency gains are shown to be significant. More importantly, we
+investigate the design space of chip area allocation to cores and
+accelerators, and make interesting observations on the optimal partition
+of resources. 
+
+In the near future, we plan to explore finer granularity
+of reconfigurable resources and accelerator-aware NoC to maximize the
+performance of {\em Transformer}. We also plan to compare Transformer
+with ASIC-based accelerators which require much effort in VLSI
+implementations. A FPGA-based prototype (with soft cores and partial
+reconfiguration) running real-world workloads obtained from cloud
+servers is in the works.
+
+%In this paper, we propose a hybrid architecture with both general
+%purpose cores and reconfigurable logic accelerators for power
+%efficient computing, which is critical in both cloud computing and
+%mobile devices. We also outline a control scheme to reconfigure the
+%accelerator at run time in response to the dynamics of the
+%workloads. We simulate such architecture with Simics based full system
+%simulator by porting benchmarks and designing a device driver for
+%accessing the accelerator from user-level threads. Our experimentation
+%results show the effectiveness of the reconfigurable logic based
+%accelerator and the run-time reconfiguration. This 
+%preliminary study encourages us to investigate the performance of the proposed hybrid
+%architecture in virtualization environments. 
+%%We also plan to optimize the run-time
+%%reconfiguration schemes for higher speedup, for example, considering
+%%not only the demand of a function, but also the speedup of
+%%the accelerated functions.

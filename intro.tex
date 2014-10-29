@@ -1,0 +1,158 @@
+
+\section{Introduction}
+
+
+Chip Multi-Processors (CMPs) have become the mainstream processors for
+mobile, desktop and cloud computing platforms due to the power
+budget and the limits on clock frequency scaling. While
+thread-level parallelism can be well leveraged with CMPs \cite{CMP05}
+for throughput oriented applications, the single-thread performance of
+a processor remains important to time critical workloads. For this
+reason it is common to integrate various ASIC-based special 
+purpose accelerators with general purpose cores into
+a system-on-chip (SoC) heterogeneous processor
+\cite{soc-acc} to improve its single-thread performance. 
+
+However, ASIC based on-chip accelerators do not respond well to
+emerging dynamic workloads where applications come and go either on
+demand or in a unpredictable manner. For example, a smartphone can
+support an exponentially growing number of Apps in social, gaming,
+health, location and other domains. The user of a smartphone may
+install or uninstall Apps at any time, leading to a changing mixture
+of applications. A cloud computing platform such as Amazon EC2
+\cite{amazon-ec2} executes various workloads such as Web
+\cite{Chen:2012jo}, data mining \cite{ec2-datamining}, DNA sequencing
+\cite{ec2-dna} submitted from users' Virtual Machines (VMs) at
+arbitrary moments. Even though SoCs with built-in accelerators are
+optimized for a fixed set of common functions such as encryption and
+compression, these functions may not be needed at certain time periods
+or for a given workload mix. As a result, such fixed accelerators
+become dormant for a prolonged time span, wasting silicon resources.
+
+A complementing approach is to use off-chip programmable hardware
+accelerators like GPU and FPGA to speed up complex workloads
+\cite{GPUFPGA, fpga-acc}. However, such hardware acceleration units do
+not meet the stringent time requirements of delay-sensitive workloads
+due to conventional system architectures. These units are typically
+connected to the processor cores via off-chip interconnects
+(e.g. PCIe, QPI \cite{intel-qpi} or HyperTransport
+\cite{amd-hypertransport}) with serious latency limits, resulting
+significant delays in data transfer. Thus, even with massively
+parallel processing capabilities, FPGAs and GPUs are challenged to
+deliver the expected speedup in reality. Their performance advantages
+and flexibility in reprogramming cannot be harnessed to the full
+extent until an architectural change occurs on their interconnects to
+cores.
+%among programmable accelerators and general purpose cores happens.
+
+Leveraging on-chip accelerators in existing and new applications is
+not trivial as redevelopment cost is prohibitive.  Allowing an
+applications' execution flow transparently directed to accelerators
+without any user intervention remains an interesting but unsolved
+issue. As new instructions are typically added along with SoC
+accelerators, rewriting and recompiling an application's code is
+mandatory. Fine-grained accelerations such as
+\cite{Govindaraju:2012fn} also require compiler support. Since IPs for
+FPGAs and programs developed for GPUs keep increasing, it makes sense
+to incorporate them through coarse-grained acceleration, i.e. the
+speedup of an entire function (e.g. 3DES encryption) as an element of
+an existing software library (e.g. libopenssl). Such library based
+approach facilitates acceleration without incurring (re)development
+costs for users.
+
+The power efficiency \cite{hamada09,thomas09} and performance benefits
+of recent programmable hardware have been driving the momentum of
+heterogeneous computing platforms that combine general-purpose cores
+and reconfigurable logics (e.g. Convey HC-1 \cite{brewer09} and Cray
+XD1\cite{Ulmer:2005vh}) for high performance computing (HPC)
+applications. However, the workloads in many computing environments
+are far more dynamic and versatile than those in HPC domain. The
+fusion of general-purpose cores and programmable logics for
+power-efficient computing is inadequately investigated in terms of
+architecture trade-offs on performance and power, transparent
+acceleration, and accelerator-aware scheduling, all of which are
+critical to the practical deployment of programmable heterogeneous
+architectures.
+
+We propose {\em Transformer}, a heterogeneous architecture with both
+general purpose cores and on-chip programmable accelerator logics for
+addressing the challenges introduced by dynamic workloads in many
+emerging scenarios. This architecture differs from existing works in
+several aspects: (1) the architecture consists of on-chip programmable
+accelerators with general purpose cores.  Sharing the memory hierarchy
+with cores, the accelerators are promoted to first-class citizens and
+access cores' data in an efficient way to reduce latency;  
+%The
+%proximity of cores and programmable accelerators promote the
+%accelerators to first class citizens of the system, eliminating the
+%overheads of off-chip communications; 
+(2) sharing an accelerator unit among multiple acceleration functions
+improves the utilization of the chip resources. Optimal area resource
+allocation to cores and accelerators leads to improved performance and
+energy efficiency. Our proposed heuristics maximize the memory
+bandwidth utilization and improve speedup of unpredictable workload
+mixtures under given resource constraints; and (3) the architecture
+enables transparent acceleration with novel middleware support,
+significantly reducing deployment costs.  It is worth noting that,
+while the programmable accelerator logics in the proposed architecture
+can be GPU based coprocessors \cite{intel-gpu}, we focus in this paper
+on FPGA-type reconfigurable logics due to the large set of existing IP
+designs available for FPGAs and their improved power
+efficiency. Nevertheless the middleware and scheduling algorithms
+studied in this research are generic enough for benefiting either
+implementation.
+
+We make the following contributions in this work:
+\begin{enumerate}
+
+\item We present a deployable heterogeneous architecture with run-time
+  programmable on-chip accelerators. Our study evaluates the
+  performance benefits of on-demand accelerators, and explores the
+  design space of silicon resource allocation to cores and
+  accelerators.
+
+\item We design a suite of middleware and scheduling algorithm for
+  supporting transparent acceleration, which is an enabling factor for
+  the wide deployment of accelerators, but not explicitly addressed in
+  prior research. To the best of our knowledge, our work is the first
+  to address this issue and present a viable solution.
+
+\item We characterize the power consumption of the proposed
+  heterogeneous architecture with industrial level power modeling
+  tools. This study gives important insights on the scalability and
+  power-performance trade-offs.
+
+\end{enumerate}
+
+The paper is organized as follows. Section \ref{sec_related} discusses
+prior work related to our research. Section \ref{sec_arch} describes
+the proposed programmable heterogeneous architecture, followed by the
+transparent acceleration mechanisms detailed in Section
+\ref{sec_transacc}. We present the accelerator-aware scheduling and
+accelerator combination algorithms in Section
+\ref{sec_runtime_reconfig}. Performance evaluation methodology and
+experiment results are presented in Section \ref{sec_perf}. Finally we
+conclude the paper in Section \ref{sec_concl}.
+
+ \if 0 FPGA as a
+co-processing unit, has demonstrated the ability to speed up a variety
+of applications, such as image processing \cite{imageacc}, data mining
+\cite{data-mining-ref}, bioinformatics \cite{bioacc1} \cite{bioacc2},
+navigation \cite{naviacc} and encryption/decryption
+\cite{encryptionacc}. As another popular alternative acceleration
+method, GPGPUs are less expensive and have higher memory bandwidth and
+a larger number of programmable cores with thousands of hardware
+threads than FPGA. So if the data to be processed can be simply
+divided into many parallel trunks without any dependency or shared
+data, it can be easily processed though the GPU
+optimizations. However, there are several limitations of GPU that may
+severely affect the computing performance on threaded GPU
+platform. First, it is usually difficult to find how much data
+parallelism lies in the application because no aspects of GPUs are
+transparent to programmers \cite{microsoft06}. Second, scatter and
+gather are two basic operations performed by GPU, which will also
+introduce a gigantic amount of memory access latency and degradation
+of memory bandwidth because of their access randomness
+\cite{GPUlimit1}. Third, there are many domains of application with
+large data dependency that are not optimized well on GPU
+\cite{GPUlimit2}.  \fi
