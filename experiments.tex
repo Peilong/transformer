@@ -114,7 +114,7 @@ this Poisson arrival pattern with default pattern - continuous
 arrival, i.e. inter-arrival time is zero.
 
 \subsection{Modeling Accelerators}
-As there is no accelerator modeled in the stock Multi2sim simulator,
+As there is no accelerator modeled in the stock Multi2Sim simulator,
 so we modify a general purpose core to simulate a reconfigurable
 accelerator unit. We make our best effort to model the
 computation, memory access and reconfiguration delays  based
@@ -241,7 +241,7 @@ With a mixture of the workloads, the instantiation of accelerator
 functions is subject to the run-time demands and the logic resource
 constraints. We execute the synthetic workloads on {\em Transformer} with eight
 cores and one reconfigurable logic unit of the size of an Xilinx
-Spartan 3E. The workloads arrival follows either a Poisson process or
+Spartan 3E. The workload's arrival follows either a Poisson process or
 a back-to-back fashion.  We issue 100 thousand billion instructions of
 the benchmark bundle and record the number of completed functions and
 cycle times. 
@@ -260,7 +260,9 @@ cycle times.
     \label{fig_8core_energy_delay}
 \end{figure}
 
-In Figure \ref{fig_8core_cycle}, we can see the accelerated
+In Figure \ref{fig_8core_cycle}, the x-axis denotes different architectures and scheduling methods, such as ``W/O Acc" (without accelerator), ``W/ Acc, 100\% Perfect" (with accelerator and 100\% perfect prediction accuracy of the incoming workloads), ``W/ Acc, Random" (with accelerator and randomly schedule incoming workload to either CPU or accelerators), ``W/ Acc, Acc-First" (with accelerator and schedule workload to accelerators with the first priority), ``W/ Acc, Naive" (with accelerator and profiling only),``W/ Acc, BW-First" (with accelerator and profiling plus Bandwidth First scheduling), and ``W/ Acc, Speedup-First" (with accelerator and Speedup First scheduling). The y-axis stands for the percentage of either performance gain or power efficiency gain.
+
+If not considering the ideal Perfect Prediction scheduling, we can see the accelerated
 architectures delivers up to 2.3x improvement on the performance
 compared to a multicore architecture without an accelerator. It is
 worth noting that such speedup is achieved on a highly dynamic
@@ -273,12 +275,28 @@ between function calls. However, Poisson arrival provides more dynamic
 combination of workload arriving at different time, and that's why we
 observe a larger speedup (1.46/0.63$\simeq$2.3x) comparing with the
 back-to-back arrival (1/0.49$\simeq$2x). 
+
 The energy-delay product depicted in Figure
 \ref{fig_8core_energy_delay} show that the power efficiency of {\em
  Transformer} improves by up to (2.01/0.29$\simeq$6.9x) as the workloads migrate to
 energy-efficient accelerators due to the scheduling and run-time
 reprogramming.
 
+As compared with other different scheduling methods, we also find our profiling methods to be the optimal with the only exception of Perfect Prediction scheduling. For example, the Speedup-First scheduling method outperforms the Random scheduling and Acc-First scheduling with a speedup of 2.12 and 1.96 respectively and a energy-delay factor gain of 5.17 and 4.24 respectively. The results of Perfect Prediction scheduling are promising, however such ``perfect" prediction never happens with the huge dynamics of the workloads in real world. Though ``perfect" in prediction, the Perfect Prediction scheduling method does not yield ``perfect" utilization of the accelerator logics. As we argued in Section \ref{subsec_combo}, maximizing the utilization of reconfigurable logics is one of the contributions in our work to improve system performance and decrease the power consumption. The Bandwidth-First scheduling and the Speedup-First scheduling, on the contrary, take both accelerator size and performance gain into consideration. Thus, on one hand, Bandwidth-First and Speedup-First scheduling methods may not be able to compete with the 100\% Perfect Prediction in terms of the prediction accuracy, however on the other hand, their accelerator combination mechanism improves the whole system performance. As shown in Figure \ref{fig_8core_cycle}, Speedup-First scheduling resembles the performance of the 90\% Perfect Prediction scheduling and Bandwidth-First scheduling matches with the performance of 80\% Perfect Prediction scheduling. 
+
+\subsubsection{Performance and Power Analysis with Various Time Window Sizes}
+One of the basic parameter setups of the experiment is the choice of profiling time window $T$. As we mention in \ref{subsec_ranking}, bad choice of $T$ will bring either oversampling or inaccuracy. Thus, we implement a series of experiments to find the optimal range of $T$ that could be used for our benchmarks. 
+
+We take the non-accelerated scenario as the baseline, and compare the performance and power efficiency gain of naive scheduling over the baseline with different profiling time window sizes. The experiment results are shown in Figure \ref{fig_time_window}.
+
+Both performance and power efficiency gain increase when $T$ goes up from $1 ms$ to $100 ms$, stay in the plateau stage when $T$ locates around $100 ms$ to $1000 ms$, and sharply drop when $T$ goes beyond $1000 ms$, where the drop is caused by the accuracy loss of profiling method when down-sampling the benchmarks. According to the results, $[10 ms, 1000 ms]$ is a reasonable range to choose $T$ in our experiment. We also notice that the performance gain and power efficiency gain is still positive when $t = 1 ms$ tough sampling rate is the highest. That means the benefits of applying profiling outperforms the profiling overhead. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=4.5in]{Time-Window-Size}
+    \caption{Performance and Power Analysis with Various Time Window Sizes.}
+    \label{fig_time_window}
+\end{figure}
 
 \subsubsection{Impact of Accelerator Scheduling on Memory-bound vs
   CPU-bound Applications}
@@ -340,12 +358,15 @@ combinations of cores and accelerators.
     \label{fig_core_acc_ratio}
 \end{figure}
 
+\subsubsection{System Parameter Analysis}
+
+
 \subsubsection{Utilization of Reconfigurable Resources}
 
 Figure \ref{fig_acc_timeline} shows a sample of the run-time
 reconfiguration process on the {\em Transformer}. The x axis is the
 scheduling time window, and the y axis is the number of acceleration
-functions instantiated on the SoC.  Figure \ref{fig_acc_timeline}
+functions instantiated on the SoC. Figure \ref{fig_acc_timeline}
 reveals the dynamics of the workload and how {Transformer} adapts its
 resources to demanding functions. Figure \ref{fig_logic_timeline}
 illustrates how the utilization of various resources within the
