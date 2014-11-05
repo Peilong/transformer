@@ -33,7 +33,7 @@ possible in practice\cite{Hansen:2011dt}.
 	\hline
 	ICAP & 32 bit bus width @ 100 MHz \\
 	\hline
-	L1 Instr/Data Cache Size (KB) & 32 \\
+	L1 Instr/Data \$ Size (KB) & 32 \\
 	\hline
     L1 Instr/Data \$ Associativity & 4\\
     \hline
@@ -54,7 +54,9 @@ possible in practice\cite{Hansen:2011dt}.
     L2 Latency (Cycles) & 20\\
     \hline
     CPU Cache Coherence & MOESI\\
-    \hline 
+    \hline
+    Accelerator Data Buffer Size (KB) & 8 \\
+    \hline
     Accelerator Data Buffer Coherence & MOESI\\
     \hline
     Memory Size (GB) & 8 \\
@@ -105,8 +107,8 @@ performance/area details. Minor modifications are done to generate the
 final benchmark mixture, including preparing the input data set for
 each function and creating multiple threads.
 
-To emulate the dynamics of workload arrival, we model the inter-arrival time of
-requests to an accelerated function as a Poisson process. The average
+To emulate the dynamics of workload arrival, we model the inter-arrival time between
+each benchmark as Poisson distribution. The average
 inter-arrival time is set as 500,000,000 (312.5 ms
 in real time if system is running at 1.6 GHz), which is close to the
 cycle time of one iteration of our shortest benchmark IDSI. We compare
@@ -242,7 +244,7 @@ functions is subject to the run-time demands and the logic resource
 constraints. We execute the synthetic workloads on {\em Transformer} with eight
 cores and one reconfigurable logic unit of the size of an Xilinx
 Spartan 3E. The workload's arrival follows either a Poisson process or
-a back-to-back fashion.  We issue 100 thousand billion instructions of
+a back-to-back fashion. We issue 100 thousand billion instructions of
 the benchmark bundle and record the number of completed functions and
 cycle times. 
 
@@ -358,10 +360,16 @@ combinations of cores and accelerators.
     \label{fig_core_acc_ratio}
 \end{figure}
 
-\subsubsection{System Parameter Analysis}
-One of the contributions of this work is to provide insights into how different parameters will affect the performance and power efficiency on the heterogeneous architecture. Thus, we study the same performance and energy efficiency metrics with different architecture parameters to render better understandings of choosing parameters. 
+\subsubsection{Experiment Parameter Analysis}
+One of the contributions of this work is to provide insights into how different parameters of the heterogeneous architecture or the benchmark will affect the performance and power efficiency on the heterogeneous architecture. Thus, we study the same performance and energy efficiency metrics with different architecture parameters to render better understandings of choosing parameters. 
 
-Cache is becoming the number one area and power consuming component on a CMP system. Thus, we first study L1 cache size as shown in Figure \ref{fig_l1_perf}. 
+Cache is becoming the number one area and power consuming component on a CMP system. Thus, we first study L1 cache size as shown in Figure \ref{fig_l1_perf}. Our system prototyped L1 cache size is 32 KB, thus 32 KB L1 cache with naive scheduling is considered as the baseline in this experiment. The performance gain increases fast when L1 cache size changes from 8 KB to 32 KB - around 12\% to 14\%; however the increase slows down when cache size changes beyond 32 KB. This result means that 32 KB of L1 cache is relatively large enough for our benchmarks. Power efficiency, on the other hand, drops steadily when cache size increases as shown in Figure \ref{fig_l1_power}. This is because the increase of cache size will great impact both static and dynamic power. 
+
+We conduct a similar experiment with change of L2 cache size in Figure \ref{fig_l2_perf} and \ref{fig_l2_power}. When we increase the size of L2 cache, both the performance gain and power efficiency gain increase or decrease with a steady rate. However, the slope of the gain is much higher than that in L1 cache's results. That is partially because accelerators and CPUs share the L2 cache with MOESI coherence. So when cache size increases, the heterogeneous architecture benefits from the lower rate of cache miss. 
+
+Accelerator local buffer works similarly as core's L1 cache. Thus, the characteristics of accelerator local buffer resemble with L1 cache's curves as shown in Figure \ref{fig_acc_buffer_perf} and \ref{fig_acc_buffer_power}. The only difference is that when we gradually change the buffer size, the gain changing rate of local buffer is higher than that of L1 cache. This is because the hardware implementation is more sensitive to the locality of input data since there is more data parallelism in accelerators. 
+
+We also study the inter-arrival time of the Poisson-distributed benchmark mixture to find if the dynamics of the workload will affect the system performance. As illustrated in Figure \ref{fig_benchmark-switching}, we take the 500 million cycles inter-arrival time with naive scheduling as the baseline since ``500 million cycles" is the setup in our experiment. The tendency of the performance gain is dropping when the benchmark inter-arrival time varies from 0 cycle to 1000 million cycles. When inter-arrival time is equal to 0, it is identical with the back-to-back setup of workload. This figure demonstrates that the more frequent change of benchmarks in the workload, the more precise of the profiling-prediction could be, and the more benefit we can gain from the scheduling methods though the overhead of accelerator reprogramming is also increasing. In addition, the performance gain difference is becoming larger between the naive scheduling methods and the other two methods when inter-arrival time increases. This is because the prediction benefit is mitigated when inter-arrival time becomes too large, however, BW-First and Speedup-First scheduling still benefit from accelerator combining. 
 
 \begin{figure}
     \centering
@@ -391,6 +399,27 @@ Cache is becoming the number one area and power consuming component on a CMP sys
     \label{fig_l2_power}
 \end{figure}
 
+\begin{figure}
+    \centering
+    \includegraphics[width=4.5in]{Acc-Buffer-Performance}
+    \caption{Performance Gain with Different Sizes of Accelerator Local Buffer.}
+    \label{fig_acc_buffer_perf}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=4.5in]{Acc-Buffer-Power}
+    \caption{Power Efficiency Gain with Different Sizes of Accelerator Local Buffer.}
+    \label{fig_acc_buffer_power}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=4.5in]{Benchmark-Switching-Time}
+    \caption{Performance Gain with Various Benchmark Inter-arrival Time.}
+    \label{fig_benchmark-switching}
+\end{figure}
+
 \subsubsection{Utilization of Reconfigurable Resources}
 
 Figure \ref{fig_acc_timeline} shows a sample of the run-time
@@ -402,7 +431,7 @@ resources to demanding functions. Figure \ref{fig_logic_timeline}
 illustrates how the utilization of various resources within the
 reconfigurable logic changes over time.
 
-Figure  \ref{fig_acc_timeline}  also validates the advantages of run-time
+Figure \ref{fig_acc_timeline}  also validates the advantages of run-time
 configuration over fixed accelerators. We observe the maximum number of each
 accelerators as: 3DES, SURF, Segmentation and Smithwaterman - 1
 instantiation, IDSI and SLAM-J - 2 instantiations, SLAM-C and Jacobi -
