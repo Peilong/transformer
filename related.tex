@@ -10,7 +10,7 @@ accelerator-rich architecture introduces new accelerator instructions and
 requires recompiling applications, lacking the run-time
 reconfigurability.  Garcia et al. propose software based kernel sharing in a
 multiprocessor system with reconfigurable hardware
-\cite{Garcia:2008iy}. This concept is similar with CHARM as both
+	\cite{Garcia:2008iy}. This concept is similar with CHARM as both
 of them emphasize the strategies on how to best utilize the existing
 accelerator.
 
@@ -37,7 +37,7 @@ growing set of available soft IP cores for reconfigurable logics
 rewriting user code.
 
 Govindaraju et al. propose {\em DySER} with both functionality and
-data parallelism specialization \cite{Govindaraju:2012fn}. DySER
+data parallelism specialization \cite{Govindaraju:2012fn,Govindaraju:HPCA11}. DySER
 provides the feasibility of dynamically specializing execution
 resources and creating various data path for parallelizable
 ``hot-spot'' in workload, and thus improve the performance and energy
@@ -50,7 +50,8 @@ hardware and middleware to perform run-time reconfiguration to avoid
 recompilation, supporting the acceleration of closed-source
 executables.
 
- 
+{\em Garp} \cite{Garp:1997,Garp:2000} and {\em Transformer} target on the same direction: that is, improve computation performance and power efficiency with FPGA-based parallelization. However, the two architectures focus on different granularities of parallelism. Similar with {\em DySER}, {\em Garp} targets on a finer granularity with the optimization of basic operations to achieve instruction level parallelism. However, since optimization on library (function) level considers the data path, data sharing and computation in a global view, thus it usually achieves better performance. Moreover, parallelization that relies on compiler requires the accuracy and optimization of the compiler because the compiler need to be intelligent enough to identify the potential part of parallelizable code and change he code in a way that the performance could be improved. Otherwise, the compiler optimized code might compromise the performance. While on the library level, we always know an optimized version of encryption on FPGA outperforms CPU version with tens or even hundreds of speedup. We just need to make sure to plug in the right accelerator at the right time to tackle with the dynamics of the workload.
+
 Other works such as HiPPAI \cite{Stillwell:2009if} and EXOCHI
 \cite{Wang:2007bc} propose new programming environment or interface
 for hardware accelerated SoC platform. HiPPAI abstracts a layer of
@@ -64,7 +65,7 @@ efficient use of the logic resource, without requiring reprogramming.
 Towards high performance big data applications, LINQits is proposed as
 a flexible hardware template that can be mapped onto programmable
 logic or ASICs in a heterogeneous system-on-chip for a mobile device
-or a server \cite{chung13}. LINQits accelerates a domain-specific query
+or a server \cite{Chung:2013:LBD:2485922.2485945}. LINQits accelerates a domain-specific query
 language called LINQ, and LINQits requires applications (re-)written with
 LINQ for taking advantage of hardware acceleration. 
 
