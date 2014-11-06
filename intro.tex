@@ -7,26 +7,19 @@ mobile, desktop and cloud computing platforms due to the power
 budget and the limits on clock frequency scaling. While
 thread-level parallelism can be well leveraged with CMPs \cite{CMP05}
 for throughput oriented applications, the single-thread performance of
-a processor remains important to time critical workloads. For this
-reason it is common to integrate various ASIC-based special 
-purpose accelerators with general purpose cores into
-a system-on-chip (SoC) heterogeneous processor
-\cite{soc-acc} to improve its single-thread performance. 
+a processor remains important to time critical workloads. Therefore,
+various ASIC-based accelerators are utilized to improve single-thread performance. 
 
 However, ASIC based on-chip accelerators do not respond well to
 emerging dynamic workloads where applications come and go either on
-demand or in a unpredictable manner. For example, a smartphone can
-support an exponentially growing number of Apps in social, gaming,
-health, location and other domains. The user of a smartphone may
+demand or in a unpredictable manner. For example, the user of a smartphone may
 install or uninstall Apps at any time, leading to a changing mixture
 of applications. A cloud computing platform such as Amazon EC2
 \cite{amazon-ec2} executes various workloads such as Web
 \cite{Chen:2012jo}, data mining \cite{ec2-datamining}, DNA sequencing
 \cite{ec2-dna} submitted from users' Virtual Machines (VMs) at
-arbitrary moments. Even though SoCs with built-in accelerators are
-optimized for a fixed set of common functions such as encryption and
-compression, these functions may not be needed at certain time periods
-or for a given workload mix. As a result, such fixed accelerators
+arbitrary moments. The built-in staic accelerators may not be needed at certain time periods
+or for a given workload mix, thus
 become dormant for a prolonged time span, wasting silicon resources.
 
 A complementing approach is to use off-chip programmable hardware
@@ -39,17 +32,18 @@ connected to the processor cores via off-chip interconnects
 \cite{amd-hypertransport}) with serious latency limits, resulting
 significant delays in data transfer. Thus, even with massively
 parallel processing capabilities, FPGAs and GPUs are challenged to
-deliver the expected speedup in reality. Their performance advantages
-and flexibility in reprogramming cannot be harnessed to the full
-extent until an architectural change occurs on their interconnects to
-cores.
-%among programmable accelerators and general purpose cores happens.
+deliver the expected speedup in reality.  
+%Their performance advantages
+%and flexibility in reprogramming cannot be harnessed to the full
+%extent until an architectural change occurs on their interconnects to
+%cores.
 
 Leveraging on-chip accelerators in existing and new applications is
-not trivial as redevelopment cost is prohibitive.  Allowing an
-applications' execution flow transparently directed to accelerators
-without any user intervention remains an interesting but unsolved
-issue. As new instructions are typically added along with SoC
+not trivial as redevelopment cost is prohibitive.  
+%Allowing an applications' execution flow to be transparently directed to accelerators
+%without any user intervention remains an interesting but unsolved
+%issue. 
+As new instructions are typically added along with SoC
 accelerators, rewriting and recompiling an application's code is
 mandatory. Fine-grained accelerations such as
 \cite{Govindaraju:2012fn} also require compiler support. Since IPs for
@@ -58,7 +52,7 @@ to incorporate them through coarse-grained acceleration, i.e. the
 speedup of an entire function (e.g. 3DES encryption) as an element of
 an existing software library (e.g. libopenssl). Such library based
 approach facilitates acceleration without incurring (re)development
-costs for users.
+costs. 
 
 The power efficiency \cite{hamada09,thomas09} and performance benefits
 of recent programmable hardware have been driving the momentum of
@@ -82,10 +76,6 @@ several aspects: (1) the architecture consists of on-chip programmable
 accelerators with general purpose cores.  Sharing the memory hierarchy
 with cores, the accelerators are promoted to first-class citizens and
 access cores' data in an efficient way to reduce latency;  
-%The
-%proximity of cores and programmable accelerators promote the
-%accelerators to first class citizens of the system, eliminating the
-%overheads of off-chip communications; 
 (2) sharing an accelerator unit among multiple acceleration functions
 improves the utilization of the chip resources. Optimal area resource
 allocation to cores and accelerators leads to improved performance and
@@ -96,7 +86,7 @@ enables transparent acceleration with novel middleware support,
 significantly reducing deployment costs.  It is worth noting that,
 while the programmable accelerator logics in the proposed architecture
 can be GPU based coprocessors \cite{intel-gpu}, we focus in this paper
-on FPGA-type reconfigurable logics due to the large set of existing IP
+on FPGA-style reconfigurable logics due to the large set of existing IP
 designs available for FPGAs and their improved power
 efficiency. Nevertheless the middleware and scheduling algorithms
 studied in this research are generic enough for benefiting either
@@ -109,9 +99,9 @@ We make the following contributions in this work:
   programmable on-chip accelerators. Our study evaluates the
   performance benefits of on-demand accelerators, and provides insight into how different parameters affect the performance and power efficiency on the heterogeneous architecture.
 
-\item We design a suite of middleware and scheduling algorithm for
+\item We design a suite of middleware and scheduling algorithms for
   supporting transparent acceleration, which is an enabling factor for
-  the wide deployment of accelerators, but not explicitly addressed in
+  the wide deployment of accelerators, but not specifically addressed in
   prior research. To the best of our knowledge, our work is the first
   to address this issue and present a viable solution.
 
