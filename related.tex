@@ -50,7 +50,25 @@ hardware and middleware to perform run-time reconfiguration to avoid
 recompilation, supporting the acceleration of closed-source
 executables.
 
-{\em Garp} \cite{Garp:1997,Garp:2000} and {\em Transformer} target on the same direction: that is, improve computation performance and power efficiency with FPGA-based parallelization. However, the two architectures focus on different granularities of parallelism. Similar with {\em DySER}, {\em Garp} targets on a finer granularity with the optimization of basic operations to achieve instruction level parallelism. However, since optimization on library (function) level considers the data path, data sharing and computation in a global view, thus it usually achieves better performance. Moreover, parallelization that relies on compiler requires the accuracy and optimization of the compiler because the compiler need to be intelligent enough to identify the potential part of parallelizable code and change he code in a way that the performance could be improved. Otherwise, the compiler optimized code might compromise the performance. While on the library level, we always know an optimized version of encryption on FPGA outperforms CPU version with tens or even hundreds of speedup. We just need to make sure to plug in the right accelerator at the right time to tackle with the dynamics of the workload.
+{\em Garp} \cite{Garp:1997,Garp:2000} and {\em Transformer} target on
+the same direction: that is, improving computation performance and power
+efficiency with FPGA-based parallelization. However, the two
+architectures focus on different granularities of parallelism. Similar
+to {\em DySER}, {\em Garp} targets on a finer granularity with the
+optimization of basic operations to achieve instruction level
+parallelism. Such parallelization heavily relies on a compiler because the compiler needs to
+precisely identify the potential parallelizable code and map the code
+to an acceleration block in a way that its performance could be
+improved. The penalty of imprecise identification is significant at such instruction level granularity.
+%Otherwise, the compiler optimized code might compromise the
+%performance. 
+Our approach focuses on the optimization at library (function) level,
+considering the data sharing and computation in a global
+view, so it usually guarantees performance improvement. We always know
+an optimized version on FPGA outperforms the CPU version of the same
+function with tens or even hundreds of speedup. We just need to make
+sure to plug in the right accelerator at the right time to tackle with
+the dynamics of the workload. 
 
 Other works such as HiPPAI \cite{Stillwell:2009if} and EXOCHI
 \cite{Wang:2007bc} propose new programming environment or interface
@@ -73,7 +91,8 @@ While the LINQits architecture has similarities with our proposed {\em
   Transformer} architecture in a ``core + FPGA'' form, there exist
 notable differences between them: (a) {\em Transformer} is a
 generic architecture not tied to a particular application domain
-whereas LINQits is designed and optimized for big data applications; and (b) no rewriting or recompiling application is needed in {\em Transformer} while
+whereas LINQits is designed and optimized for big data applications; 
+and (b) no rewriting or recompiling application is needed in {\em Transformer} while
 LINQits relies on rewriting applications with LINQ language
 constructs, which are not applicable for non-database applications.
 
@@ -93,7 +112,6 @@ relocating tasks between software path and accelerated hardware
 path. They implement a new OS (OS4RS) which contains a hardware
 abstraction layer and a communication interface to enable OS tasking
 scheduling between software and hardware. 
-
 However, {\em Transformer} does not require changes to OS
 layer. Instead, transparent acceleration in {\em Transformer} is
 achieved with a wrapper library which resides at the middleware layer,
@@ -115,7 +133,22 @@ vendor-provided FPGA Linux API into their software design. In
 contrast, {\em Transformer} provides a transparent scheme of invoking
 accelerators.
 
-As an ``extreme" form on fixed specialization, Conservation cores \cite{Venkatesh:2010:CCR:1735970.1736044,Venkatesh:2010:CCR:1736020.1736044,Venkatesh:2010:CCR:1735971.1736044}, or c-cores, are specialized processors that focus only on energy and energy-delay efficiency rather than improving performance. C-cores provides a promising reduction of energy consumption (up to 16.0$\times$ for specific functions and up to 2.1$\times$ for whole application), which is comparable with {\em Transformer}'s energy efficiency (up to 6.9$\times$), at the risk of compromising the performance. However, we argue that QoS is one of the most important concerns for most of the cloud service provider, that is, providing the best user experience. Thus, the balance between performance and power consumption should be considered for cloud architect. In contrast, {\em Transformer} provides a solution that considers both performance and power aspects in cloud service. In addition, the service provider typically does not have access to the source code used or owned by the customers in a cloud computing environment. {\em Transformer}'s middleware approach based on wrapper library imposes no requirements on source code access, therefore is feasible for a wide range of applications. 
+As an ``extreme" form on fixed specialization, conservation cores
+\cite{Venkatesh:2010:CCR:1735970.1736044,Venkatesh:2010:CCR:1736020.1736044,Venkatesh:2010:CCR:1735971.1736044},
+or c-cores, are specialized processors that focus only on energy and
+energy-delay efficiency rather than improving performance. C-cores
+provides a promising reduction of energy consumption (up to
+16.0$\times$ for specific functions and up to 2.1$\times$ for whole
+application), which is comparable with {\em Transformer}'s energy
+efficiency (up to 6.9$\times$), at the risk of compromising the
+performance. However, we argue that QoS is one of the most important
+concerns for most of the cloud service provider, that is, providing
+the best user experience. Thus, the balance between performance and
+power consumption should be carefully considered. {\em Transformer}
+provides a solution that considers both performance and power aspects
+in cloud services. In addition, the service provider typically does
+not have access to the source code used or owned by the customers in a
+cloud computing environment. This makes c-core ineffective in such scenarios. {\em Transformer}'s middleware approach based on wrapper library imposes no requirements on source code access, therefore is feasible for a wide range of applications. 
 
 Given the reprogramming/partial-reconfiguration costs of FPGA-type of
 logics (in the order of tens or hundreds of milliseconds depending on

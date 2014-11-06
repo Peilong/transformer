@@ -25,12 +25,14 @@ coherence.
 \vspace{-0.05in}
 \end{figure}
 
-Transformer's reconfigurable logic consists of {\em N} data transfer
+Transformer's reconfigurable logic consists of computational resources
+and {\em N} data transfer
 units, supporting the instantiation of {\em N} independent accelerator
-functions. The actual number of functions instantiated in the
+functions. The computational resources are organized in BRAM, DSP,
+SLICEs as in a generic FPGA chip. The actual number of functions instantiated in the
 programmable logic depends on the particular functions selected to
 speed up at runtime and the resource requirements of the hardware
-implementation of these functions. We explore the design space of
+implementation of these functions. We study the architectural tradeoffs of 
 reconfigurable logic and the number of cores in terms of performance
 gains and power savings in Section \ref{sec_perf}.
 
@@ -187,7 +189,6 @@ directly used user applications.
 
 To reduce the data transaction time from/to accelerators, a
 combination of DMA and double buffering is used. 
-
 Using double buffering, the accelerators can work on data residing in
 their local memory while the DMA is fetching the next batch of data. A
 TLB is located in between DMA and L2 cache to perform
