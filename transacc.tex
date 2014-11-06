@@ -52,7 +52,10 @@ original dynamic linked library is renamed by adding suffix
 create our new dynamic-linked library with the same name as the original library, and
 incorporate a wrapper function to intercept all the library calls
 (call to the original function names) and
-redirect them to either the original software library or the hardware accelerator.
+redirect them to either the original software library or the hardware
+accelerator. It is also worthy noting that the wrapper library is
+executed on a CPU core, and its overhead is very small as shown in
+Section \ref{sec_perf}.
 
 The responsibilities of wrapper functions are two folds: (1) {\em profiling}:
 a wrapper library record the number of calls to each of the

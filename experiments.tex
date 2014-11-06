@@ -262,10 +262,20 @@ cycle times.
     \label{fig_8core_energy_delay}
 \end{figure}
 
-In Figure \ref{fig_8core_cycle}, the x-axis denotes different architectures and scheduling methods, such as ``W/O Acc" (without accelerator), ``W/ Acc, 100\% Perfect" (with accelerator and 100\% perfect prediction accuracy of the incoming workloads), ``W/ Acc, Random" (with accelerator and randomly schedule incoming workload to either CPU or accelerators), ``W/ Acc, Acc-First" (with accelerator and schedule workload to accelerators with the first priority), ``W/ Acc, Naive" (with accelerator and profiling only),``W/ Acc, BW-First" (with accelerator and profiling plus Bandwidth First scheduling), and ``W/ Acc, Speedup-First" (with accelerator and Speedup First scheduling). The y-axis stands for the percentage of either performance gain or power efficiency gain.
+Figure \ref{fig_8core_cycle} depicts the performance of different
+scheduling methods. Its x-axis denotes different
+architectures and scheduling methods, such as ``W/O Acc" (without
+accelerator), ``W/ Acc, 100\% Perfect" (with accelerator and 100\%
+perfect prediction accuracy of the incoming workloads), ``W/ Acc,
+Random" (with accelerator and randomly schedule incoming workload to
+either CPU or accelerators), ``W/ Acc, Acc-First" (with accelerator
+and schedule workload to accelerators with the first priority), ``W/
+Acc, Naive" (with accelerator and profiling only),``W/ Acc, BW-First"
+(with accelerator and profiling plus Bandwidth First scheduling), and
+``W/ Acc, Speedup-First" (with accelerator and Speedup First
+scheduling). The y-axis is normalized execution time.
 
-If not considering the ideal Perfect Prediction scheduling, we can see the accelerated
-architectures delivers up to 2.3x improvement on the performance
+The accelerated architectures delivers up to 2.3x improvement on the performance
 compared to a multicore architecture without an accelerator. It is
 worth noting that such speedup is achieved on a highly dynamic
 workload bundle of which the processor has no prior knowledge of the
@@ -284,14 +294,45 @@ The energy-delay product depicted in Figure
 energy-efficient accelerators due to the scheduling and run-time
 reprogramming.
 
-As compared with other different scheduling methods, we also find our profiling methods to be the optimal with the only exception of Perfect Prediction scheduling. For example, the Speedup-First scheduling method outperforms the Random scheduling and Acc-First scheduling with a speedup of 2.12 and 1.96 respectively and a energy-delay factor gain of 5.17 and 4.24 respectively. The results of Perfect Prediction scheduling are promising, however such ``perfect" prediction never happens with the huge dynamics of the workloads in real world. Though ``perfect" in prediction, the Perfect Prediction scheduling method does not yield ``perfect" utilization of the accelerator logics. As we argued in Section \ref{subsec_combo}, maximizing the utilization of reconfigurable logics is one of the contributions in our work to improve system performance and decrease the power consumption. The Bandwidth-First scheduling and the Speedup-First scheduling, on the contrary, take both accelerator size and performance gain into consideration. Thus, on one hand, Bandwidth-First and Speedup-First scheduling methods may not be able to compete with the 100\% Perfect Prediction in terms of the prediction accuracy, however on the other hand, their accelerator combination mechanism improves the whole system performance. As shown in Figure \ref{fig_8core_cycle}, Speedup-First scheduling resembles the performance of the 90\% Perfect Prediction scheduling and Bandwidth-First scheduling matches with the performance of 80\% Perfect Prediction scheduling. 
+
+
+From comparing with other different scheduling methods, we find ours
+to be close to the ``Perfect Prediction'' scheduling. The perfect
+prediction scheduling scheme can hypothetically predict precisely
+the demands from incoming workloads. Such best possible scheduling
+strategie provides us the best value (OPT) of performance and power
+efficiency that could be achieved with the given hardware. Using this
+as the baseline, we can see that our proposed speedup-first scheduling
+heuristic can achieve 1.32xOPT on performance (in terms of execution
+time) and and 1.9xOPT energy-delay-product, respectively. The detailed
+results are depicted in Figures 7 and 8.  
+
+\if 0
+For example, the Speedup-First scheduling method outperforms the
+Random scheduling and Acc-First scheduling with a speedup of 2.12 and
+1.96 respectively and a energy-delay factor gain of 5.17 and 4.24
+respectively. The results of Perfect Prediction scheduling are
+promising, however such ``perfect" prediction never happens with the
+huge dynamics of the workloads in real world. Though ``perfect" in
+prediction, the Perfect Prediction scheduling method does not yield
+``perfect" utilization of the accelerator logics. 
+As we argued in Section \ref{subsec_combo}, maximizing the utilization of reconfigurable logics is one of the contributions in our work to improve system performance and decrease the power consumption. The Bandwidth-First scheduling and the Speedup-First scheduling, on the contrary, take both accelerator size and performance gain into consideration. Thus, on one hand, Bandwidth-First and Speedup-First scheduling methods may not be able to compete with the 100\% Perfect Prediction in terms of the prediction accuracy, however on the other hand, their accelerator combination mechanism improves the whole system performance. As shown in Figure \ref{fig_8core_cycle}, Speedup-First scheduling resembles the performance of the 90\% Perfect Prediction scheduling and Bandwidth-First scheduling matches with the performance of 80\% Perfect Prediction scheduling. 
+\fi
 
 \subsubsection{Performance and Power Analysis with Various Time Window Sizes}
-One of the basic parameter setups of the experiment is the choice of profiling time window $T$. As we mention in \ref{subsec_ranking}, bad choice of $T$ will bring either oversampling or inaccuracy. Thus, we implement a series of experiments to find the optimal range of $T$ that could be used for our benchmarks. 
-
+One of the basic parameter setups of the experiment is the choice of profiling time window $T$. As we mention in \ref{subsec_ranking}, bad choice of $T$ will bring either oversampling or inaccuracy. Thus, we implement a series of experiments to find the optimal $T$ that could be used for our benchmarks. 
 We take the non-accelerated scenario as the baseline, and compare the performance and power efficiency gain of naive scheduling over the baseline with different profiling time window sizes. The experiment results are shown in Figure \ref{fig_time_window}.
 
-Both performance and power efficiency gain increase when $T$ goes up from $1 ms$ to $100 ms$, stay in the plateau stage when $T$ locates around $100 ms$ to $1000 ms$, and sharply drop when $T$ goes beyond $1000 ms$, where the drop is caused by the accuracy loss of profiling method when down-sampling the benchmarks. According to the results, $[10 ms, 1000 ms]$ is a reasonable range to choose $T$ in our experiment. We also notice that the performance gain and power efficiency gain is still positive when $t = 1 ms$ tough sampling rate is the highest. That means the benefits of applying profiling outperforms the profiling overhead. 
+Both performance and power efficiency gain increase when $T$ goes up
+from $1 ms$ to $100 ms$, stay in the plateau stage when $T$ locates
+around $100 ms$ to $1000 ms$, and sharply drop when $T$ goes beyond
+$1000 ms$, where the drop is caused by the accuracy loss of profiling
+method when down-sampling the benchmarks. According to the results,
+$[10 ms, 1000 ms]$ is a reasonable range to choose $T$ in our
+experiment. We thus set the window size $T$ to be {\bf FIXME 100ms}.
+%We also notice that the performance gain and power
+%efficiency gain is still positive when $t = 1 ms$ tough sampling rate
+%is the highest. That means the benefits of applying profiling and scheduling outweigh the profiling overhead. 
 
 \begin{figure}
     \centering
@@ -310,7 +351,7 @@ rank $P_x$).  We construct two workload bundles based on the memory
 access intensity of benchmarks: memory-bound (bandwidth over 500MB/s
 in Table \ref{tbl_benchmark}) and CPU-bound.
 
-By design,
+By design, the
 bandwidth-first strategy prioritizes the utilization of memory
 bandwidth, which inherently gives memory-bandwidth hungry benchmarks
 more chances to take advantage of the accelerator logics. As a result,
@@ -360,12 +401,29 @@ combinations of cores and accelerators.
     \label{fig_core_acc_ratio}
 \end{figure}
 
-\subsubsection{Experiment Parameter Analysis}
-One of the contributions of this work is to provide insights into how different parameters of the heterogeneous architecture or the benchmark will affect the performance and power efficiency on the heterogeneous architecture. Thus, we study the same performance and energy efficiency metrics with different architecture parameters to render better understandings of choosing parameters. 
+\subsubsection{Architectural Parameter Analysis}
+One of the contributions of this work is to provide insights into how
+different parameters of the heterogeneous architecture or the
+benchmark will affect the performance and power efficiency on the
+heterogeneous architecture. Thus, we study the same performance and
+energy efficiency metrics with different architecture parameters to
+render better understandings of their implications. 
 
-Cache is becoming the number one area and power consuming component on a CMP system. Thus, we first study L1 cache size as shown in Figure \ref{fig_l1_perf}. Our system prototyped L1 cache size is 32 KB, thus 32 KB L1 cache with naive scheduling is considered as the baseline in this experiment. The performance gain increases fast when L1 cache size changes from 8 KB to 32 KB - around 12\% to 14\%; however the increase slows down when cache size changes beyond 32 KB. This result means that 32 KB of L1 cache is relatively large enough for our benchmarks. Power efficiency, on the other hand, drops steadily when cache size increases as shown in Figure \ref{fig_l1_power}. This is because the increase of cache size will great impact both static and dynamic power. 
+We first study L1 cache size as shown in Figure \ref{fig_l1_perf}. Our
+system with 32 KB L1 cache and naive scheduling is considered as the
+baseline in this experiment. The performance gain increases fast when
+L1 cache size changes from 8 KB to 32 KB - around 12\% to 14\%;
+however the increase slows down when cache size changes beyond 32
+KB. This result means that 32 KB of L1 cache is relatively large
+enough for our benchmarks. Power efficiency, on the other hand, drops
+steadily when cache size increases as shown in Figure
+\ref{fig_l1_power}. This is because the increase of cache size will
+greatly increase both static and dynamic power. 
 
-We conduct a similar experiment with change of L2 cache size in Figure \ref{fig_l2_perf} and \ref{fig_l2_power}. When we increase the size of L2 cache, both the performance gain and power efficiency gain increase or decrease with a steady rate. However, the slope of the gain is much higher than that in L1 cache's results. That is partially because accelerators and CPUs share the L2 cache with MOESI coherence. So when cache size increases, the heterogeneous architecture benefits from the lower rate of cache miss. 
+We conduct a similar experiment by changing L2 cache size, and show
+the results in Figure \ref{fig_l2_perf} and \ref{fig_l2_power}. When
+we increase the size of L2 cache, the performance gain increases and
+power efficiency gain decreases with a steady rate. However, the slope of the gain is much higher than that in L1 cache's results. That is partially because accelerators and CPUs share the L2 cache with MOESI coherence. So when cache size increases, the heterogeneous architecture benefits from the lower rate of cache miss. 
 
 Accelerator local buffer works similarly as core's L1 cache. Thus, the characteristics of accelerator local buffer resemble with L1 cache's curves as shown in Figure \ref{fig_acc_buffer_perf} and \ref{fig_acc_buffer_power}. The only difference is that when we gradually change the buffer size, the gain changing rate of local buffer is higher than that of L1 cache. This is because the hardware implementation is more sensitive to the locality of input data since there is more data parallelism in accelerators. 
 
