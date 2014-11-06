@@ -73,9 +73,7 @@ While the LINQits architecture has similarities with our proposed {\em
   Transformer} architecture in a ``core + FPGA'' form, there exist
 notable differences between them: (a) {\em Transformer} is a
 generic architecture not tied to a particular application domain
-whereas LINQits is designed and optimized for big data applications;
-
-and (b) No rewriting or recompiling applications is needed in {\em Transformer} while
+whereas LINQits is designed and optimized for big data applications; and (b) no rewriting or recompiling application is needed in {\em Transformer} while
 LINQits relies on rewriting applications with LINQ language
 constructs, which are not applicable for non-database applications.
 
@@ -83,9 +81,7 @@ Huang et al. propose an aggregate gain algorithm (AG)
 \cite{Huang:2009hs} to predict future acceleration requirement of the
 workload. This prediction mechanism may work properly on some specific
 domain of computing, however, cloud workloads are too dynamic to be
-accurately predicted. 
-
-In \cite{Huang:2009hs}, cache coherency is not considered and the
+accurately predicted. Also in \cite{Huang:2009hs}, cache coherency is not considered and the
 number of LUTs is the only resource constraint. {\em Transformer}
 maintains coherency on both cores' caches and accelerators' local
 memory and considers constraints of all logic resources (LUT, BRAM,
@@ -119,6 +115,7 @@ vendor-provided FPGA Linux API into their software design. In
 contrast, {\em Transformer} provides a transparent scheme of invoking
 accelerators.
 
+As an ``extreme" form on fixed specialization, Conservation cores \cite{Venkatesh:2010:CCR:1735970.1736044,Venkatesh:2010:CCR:1736020.1736044,Venkatesh:2010:CCR:1735971.1736044}, or c-cores, are specialized processors that focus only on energy and energy-delay efficiency rather than improving performance. C-cores provides a promising reduction of energy consumption (up to 16.0$\times$ for specific functions and up to 2.1$\times$ for whole application), which is comparable with {\em Transformer}'s energy efficiency (up to 6.9$\times$), at the risk of compromising the performance. However, we argue that QoS is one of the most important concerns for most of the cloud service provider, that is, providing the best user experience. Thus, the balance between performance and power consumption should be considered for cloud architect. In contrast, {\em Transformer} provides a solution that considers both performance and power aspects in cloud service. In addition, the service provider typically does not have access to the source code used or owned by the customers in a cloud computing environment. {\em Transformer}'s middleware approach based on wrapper library imposes no requirements on source code access, therefore is feasible for a wide range of applications. 
 
 Given the reprogramming/partial-reconfiguration costs of FPGA-type of
 logics (in the order of tens or hundreds of milliseconds depending on
