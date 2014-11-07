@@ -108,7 +108,7 @@ each function and creating multiple threads.
 
 To emulate the dynamics of workload arrival, we model the inter-arrival time between
 each benchmark as Poisson distribution. The average
-inter-arrival time is set as 500,000,000 (312.5 ms
+inter-arrival time is set as 500 million cycles (312.5 ms
 in real time if system is running at 1.6 GHz), which is close to the
 cycle time of one iteration of our shortest benchmark IDSI. We compare
 this Poisson arrival pattern with default pattern - continuous
@@ -487,7 +487,7 @@ reconfigurable logic changes over time.
 
 Figure \ref{fig_acc_timeline}  also validates the advantages of run-time
 configuration over fixed accelerators. We observe the maximum number of each
-accelerators as: 3DES, SURF, Segmentation and Smithwaterman - 1
+accelerators as: 3DES, SURF, Segmentation and Smith-waterman - 1
 instantiation, IDSI and SLAM-J - 2 instantiations, SLAM-C and Jacobi -
 3 instantiations. To achieve the same performance, the total logics we
 would need if we rely on fixed onchip accelerators are: SLICE - 17848, FF
