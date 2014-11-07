@@ -300,12 +300,9 @@ From comparing with other different scheduling methods, we find ours
 to be close to the ``Perfect Prediction'' scheduling. The perfect
 prediction scheduling scheme can hypothetically predict precisely
 the demands from incoming workloads. Such best possible scheduling
-strategie provides us the best value (OPT) of performance and power
-efficiency that could be achieved with the given hardware. Using this
-as the baseline, we can see that our proposed speedup-first scheduling
-heuristic can achieve 1.32xOPT on performance (in terms of execution
-time) and and 1.9xOPT energy-delay-product, respectively. The detailed
-results are depicted in Figures 7 and 8.  
+strategy provides us the best value of performance and power
+efficiency that could be achieved with the given hardware. We can see that our proposed Speedup-First and BW-First scheduling heuristic can achieve close performance (in terms of execution time) and energy-delay-product with the "90\% Perfect" scheduling and "80\% Perfect" scheduling, respectively. The detailed
+results are depicted in Figures \ref{fig_8core_cycle} and \ref{fig_8core_energy_delay}.  
 
 \if 0
 For example, the Speedup-First scheduling method outperforms the
@@ -329,7 +326,7 @@ around $100 ms$ to $1000 ms$, and sharply drop when $T$ goes beyond
 $1000 ms$, where the drop is caused by the accuracy loss of profiling
 method when down-sampling the benchmarks. According to the results,
 $[10 ms, 1000 ms]$ is a reasonable range to choose $T$ in our
-experiment. We thus set the window size $T$ to be {\bf FIXME 100ms}.
+experiment. We thus set the window size $T$ to be $100 ms$.
 %We also notice that the performance gain and power
 %efficiency gain is still positive when $t = 1 ms$ tough sampling rate
 %is the highest. That means the benefits of applying profiling and scheduling outweigh the profiling overhead. 
