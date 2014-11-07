@@ -40,10 +40,9 @@ index to the table to increment the corresponding request counter. The
 counters are input metrics to the scheduling algorithm to determine which
 functions to accelerate. Tracking demands requires a table
 lookup and a table update, i.e. only two memory operations (one
-read and one write). Such overheads are trivial even when the number
+read and one write). The overheads of maintaining counters are trivial even when the number
 of accelerators scales up to hundreds, this is because such counter
-update is once per function call, which is typically very
-time-consuming (e.g. in thousands or millions of cycles). The counters
+update is only once per a library function call, and the library function itself is typically very time-consuming (e.g. in millions of cycles). The counters
 are reset periodically to record the most recent demands. 
 
 
