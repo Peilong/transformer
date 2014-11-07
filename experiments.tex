@@ -82,13 +82,12 @@ possible in practice\cite{Hansen:2011dt}.
 
 To model the profiling and scheduling overheads in the simulations,
 we evaluate the overhead of the profiler within the wrapper function and the
-three scheduling methods - na\"{\i}ve, bandwidth first or speedup first. For
-the worse case, the profiler and wrapper function overheads take up
+three scheduling methods - na\"{\i}ve, bandwidth-first or speedup-first. For
+the worse case, the profiler and wrapper function's overhead takes up
 to 0.017 \% per profiling window time and the worse case happens only
 when the reconfiguration controller accepts the current acceleration
 request within the profiling window. The two knapsack combination
-scheduling algorithms introduce more overhead than na\"{\i}ve scheduling. However, further evaluation shows that the overhead of both bandwidth
-first and speedup first algorithms introduce an neglectable overhead of 0.130 \% per profiling window. 
+scheduling algorithms introduce more overhead than na\"{\i}ve scheduling. However, further evaluation shows that the overhead of both bandwidth-first and speedup-first algorithms introduce an neglectable overhead of 0.130 \% per profiling window. 
 
 \subsection{Benchmarks}
 We use all the eight acceleration functions from the
@@ -139,7 +138,7 @@ the time of the access, and the vertical axis is the address within a
 page range. In this way, we observe the temporal and spatial
 characteristics of the memory accesses. It can be seen that {\em
   Jacobi} has a much larger number of  accesses than SLAM-J, and the
-accesses span over a wider address range. We model such the memory
+accesses span over a wider address range. We model such memory
 access patterns when simulating accelerators, besides visually
 differentiating memory bound applications from the computation intensive
 ones. 
@@ -211,7 +210,7 @@ Figure \ref{fig_num_of_apps} shows that the performance speedup on the y
 axis while the x axis shows the increasing number of threads. The
 baseline performance is the execution time of $k$ threads on multicore
 architecture without the accelerator. We can
-observe that the speedup for 3DES is significant ($\sim$14x) when the number of threads is
+observe that the speedup for 3DES is significant ($\sim14\times$) when the number of threads is
 within two, beyond which the speedup reduces. This is because the
 resources available in the accelerator logic only allow up to two
 3DES accelerator functions instantiated. The remainder of the threads
@@ -271,11 +270,11 @@ Random" (with accelerator and randomly schedule incoming workload to
 either CPU or accelerators), ``W/ Acc, Acc-First" (with accelerator
 and schedule workload to accelerators with the first priority), ``W/
 Acc, Naive" (with accelerator and profiling only),``W/ Acc, BW-First"
-(with accelerator and profiling plus Bandwidth First scheduling), and
-``W/ Acc, Speedup-First" (with accelerator and Speedup First
+(with accelerator and profiling plus bandwidth-first scheduling), and
+``W/ Acc, Speedup-First" (with accelerator and speedup-first
 scheduling). The y-axis is normalized execution time.
 
-The accelerated architectures delivers up to 2.3x improvement on the performance
+The accelerated architectures delivers up to $2.3\times$ improvement on the performance
 compared to a multicore architecture without an accelerator. It is
 worth noting that such speedup is achieved on a highly dynamic
 workload bundle of which the processor has no prior knowledge of the
@@ -285,12 +284,12 @@ middleware (wrapper library). The workload following a Poisson arrival
 process has longer execution time because there are idle cycles
 between function calls. However, Poisson arrival provides more dynamic
 combination of workload arriving at different time, and that's why we
-observe a larger speedup (1.46/0.63$\simeq$2.3x) comparing with the
-back-to-back arrival (1/0.49$\simeq$2x). 
+observe a larger speedup ($1.46/0.63\simeq2.3\times$) comparing with the
+back-to-back arrival ($1/0.49\simeq2\times$). 
 
 The energy-delay product depicted in Figure
 \ref{fig_8core_energy_delay} show that the power efficiency of {\em
- Transformer} improves by up to (2.01/0.29$\simeq$6.9x) as the workloads migrate to
+ Transformer} improves by up to ($2.01/0.29\simeq6.9\times$) as the workloads migrate to
 energy-efficient accelerators due to the scheduling and run-time
 reprogramming.
 
@@ -301,11 +300,11 @@ to be close to the ``Perfect Prediction'' scheduling. The perfect
 prediction scheduling scheme can hypothetically predict precisely
 the demands from incoming workloads. Such best possible scheduling
 strategy provides us the best value of performance and power
-efficiency that could be achieved with the given hardware. We can see that our proposed Speedup-First and BW-First scheduling heuristic can achieve close performance (in terms of execution time) and energy-delay-product with the ``90\% Perfect'' scheduling and ``80\% Perfect'' scheduling, respectively. The detailed
+efficiency that could be achieved with the given hardware. We can see that our proposed speedup-first and bandwidth-first scheduling heuristic can achieve close performance (in terms of execution time) and energy-delay-product with the ``90\% Perfect'' scheduling and ``80\% Perfect'' scheduling, respectively. The detailed
 results are depicted in Figures \ref{fig_8core_cycle} and \ref{fig_8core_energy_delay}.  
 
 \if 0
-For example, the Speedup-First scheduling method outperforms the
+For example, the speedup-first scheduling method outperforms the
 Random scheduling and Acc-First scheduling with a speedup of 2.12 and
 1.96 respectively and a energy-delay factor gain of 5.17 and 4.24
 respectively. The results of Perfect Prediction scheduling are
@@ -313,7 +312,7 @@ promising, however such ``perfect" prediction never happens with the
 huge dynamics of the workloads in real world. Though ``perfect" in
 prediction, the Perfect Prediction scheduling method does not yield
 ``perfect" utilization of the accelerator logics. 
-As we argued in Section \ref{subsec_combo}, maximizing the utilization of reconfigurable logics is one of the contributions in our work to improve system performance and decrease the power consumption. The Bandwidth-First scheduling and the Speedup-First scheduling, on the contrary, take both accelerator size and performance gain into consideration. Thus, on one hand, Bandwidth-First and Speedup-First scheduling methods may not be able to compete with the 100\% Perfect Prediction in terms of the prediction accuracy, however on the other hand, their accelerator combination mechanism improves the whole system performance. As shown in Figure \ref{fig_8core_cycle}, Speedup-First scheduling resembles the performance of the 90\% Perfect Prediction scheduling and Bandwidth-First scheduling matches with the performance of 80\% Perfect Prediction scheduling. 
+As we argued in Section \ref{subsec_combo}, maximizing the utilization of reconfigurable logics is one of the contributions in our work to improve system performance and decrease the power consumption. The bandwidth-first scheduling and the speedup-first scheduling, on the contrary, take both accelerator size and performance gain into consideration. Thus, on one hand, bandwidth-first and speedup-first scheduling methods may not be able to compete with the 100\% Perfect Prediction in terms of the prediction accuracy, however on the other hand, their accelerator combination mechanism improves the whole system performance. As shown in Figure \ref{fig_8core_cycle}, speedup-first scheduling resembles the performance of the 90\% Perfect Prediction scheduling and bandwidth-first scheduling matches with the performance of 80\% Perfect Prediction scheduling. 
 \fi
 
 \subsubsection{Performance and Power Analysis with Various Time Window Sizes}
@@ -424,7 +423,7 @@ power efficiency gain decreases with a steady rate. However, the slope of the ga
 
 Accelerator local buffer works similarly as core's L1 cache. Thus, the characteristics of accelerator local buffer resemble with L1 cache's curves as shown in Figure \ref{fig_acc_buffer_perf} and \ref{fig_acc_buffer_power}. The only difference is that when we gradually change the buffer size, the gain changing rate of local buffer is higher than that of L1 cache. This is because the hardware implementation is more sensitive to the locality of input data since there is more data parallelism in accelerators. 
 
-We also study the inter-arrival time of the Poisson-distributed benchmark mixture to find if the dynamics of the workload will affect the system performance. As illustrated in Figure \ref{fig_benchmark-switching}, we take the 500 million cycles inter-arrival time with naive scheduling as the baseline since ``500 million cycles" is the setup in our experiment. The tendency of the performance gain is dropping when the benchmark inter-arrival time varies from 0 cycle to 1000 million cycles. When inter-arrival time is equal to 0, it is identical with the back-to-back setup of workload. This figure demonstrates that the more frequent change of benchmarks in the workload, the more precise of the profiling-prediction could be, and the more benefit we can gain from the scheduling methods though the overhead of accelerator reprogramming is also increasing. In addition, the performance gain difference is becoming larger between the naive scheduling methods and the other two methods when inter-arrival time increases. This is because the prediction benefit is mitigated when inter-arrival time becomes too large, however, BW-First and Speedup-First scheduling still benefit from accelerator combining. 
+We also study the inter-arrival time of the Poisson-distributed benchmark mixture to find if the dynamics of the workload will affect the system performance. As illustrated in Figure \ref{fig_benchmark-switching}, we take the 500 million cycles inter-arrival time with naive scheduling as the baseline since ``500 million cycles" is the setup in our experiment. The tendency of the performance gain is dropping when the benchmark inter-arrival time varies from 0 cycle to 1000 million cycles. When inter-arrival time is equal to 0, it is identical with the back-to-back setup of workload. This figure demonstrates that the more frequent change of benchmarks in the workload, the more precise of the profiling-prediction could be, and the more benefit we can gain from the scheduling methods though the overhead of accelerator reprogramming is also increasing. In addition, the performance gain difference is becoming larger between the naive scheduling methods and the other two methods when inter-arrival time increases. This is because the prediction benefit is mitigated when inter-arrival time becomes too large, however, bandwidth-first and speedup-first scheduling still benefit from accelerator combining. 
 
 \begin{figure}
     \centering

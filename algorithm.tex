@@ -42,7 +42,7 @@ functions to accelerate. Tracking demands requires a table
 lookup and a table update, i.e. only two memory operations (one
 read and one write). Such overheads are trivial even when the number
 of accelerators scales up to hundreds, this is because such counter
-update is once per a function call, which is typically very
+update is once per function call, which is typically very
 time-consuming (e.g. in thousands or millions of cycles). The counters
 are reset periodically to record the most recent demands. 
 
@@ -82,7 +82,7 @@ enough to capture very detailed demand changes of acceleration
 requests. 
 
 We maintain an array of counters $C(x, i)$ collected in the past $R$
-time window, where $x$ represents the corresponding accelerator
+time windows, where $x$ represents the corresponding accelerator
 function and $1<i<R$. At run time, we would have an $f \times R$
 matrix $M$ that reflects the demands for $f$ accelerator functions in
 the past $R$ time windows.  After obtaining $M$, we use the following
