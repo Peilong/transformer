@@ -12,13 +12,13 @@ various ASIC-based accelerators are utilized to improve single-thread performanc
 
 However, ASIC based on-chip accelerators do not respond well to
 emerging dynamic workloads where applications come and go either on
-demand or in a unpredictable manner. For example, the user of a smartphone may
+demand or in an unpredictable manner. For example, the user of a smartphone may
 install or uninstall Apps at any time, leading to a changing mixture
 of applications. A cloud computing platform such as Amazon EC2
 \cite{amazon-ec2} executes various workloads such as Web
 \cite{Chen:2012jo}, data mining \cite{ec2-datamining}, DNA sequencing
 \cite{ec2-dna} submitted from users' Virtual Machines (VMs) at
-arbitrary moments. The built-in staic accelerators may not be needed at certain time periods
+arbitrary moments. The built-in static accelerators may not be needed at certain time periods
 or for a given workload mix, thus
 become dormant for a prolonged time span, wasting silicon resources.
 
@@ -28,7 +28,7 @@ accelerators like GPU and FPGA to speed up complex workloads
 not meet the stringent time requirements of delay-sensitive workloads
 due to conventional system architectures. These units are typically
 connected to the processor cores via off-chip interconnects
-(e.g. PCIe, QPI \cite{intel-qpi} or HyperTransport
+(e.g., PCIe, QPI \cite{intel-qpi} or HyperTransport
 \cite{amd-hypertransport}) with serious latency limits, resulting
 significant delays in data transfer. Thus, even with massively
 parallel processing capabilities, FPGAs and GPUs are challenged to
@@ -45,23 +45,22 @@ not trivial as redevelopment cost is prohibitive.
 %issue. 
 As new instructions are typically added along with SoC
 accelerators, rewriting and recompiling an application's code is
-mandatory. Fine-grained accelerations such as
-\cite{Govindaraju:2012fn} also require compiler support. Since IPs for
+mandatory. Fine-grained accelerations also require compiler support \cite{Govindaraju:2012fn}. Since IPs for
 FPGAs and programs developed for GPUs keep increasing, it makes sense
 to incorporate them through coarse-grained acceleration, i.e. the
-speedup of an entire function (e.g. 3DES encryption) as an element of
-an existing software library (e.g. libopenssl). Such library based
+speedup of an entire function (e.g., 3DES encryption) as an element of
+an existing software library (e.g., libopenssl). Such library based
 approach facilitates acceleration without incurring (re)development
 costs. 
 
 The power efficiency \cite{hamada09,thomas09} and performance benefits
 of recent programmable hardware have been driving the momentum of
 heterogeneous computing platforms that combine general-purpose cores
-and reconfigurable logics (e.g. Convey HC-1 \cite{brewer09} and Cray
-XD1\cite{Ulmer:2005vh}) for high performance computing (HPC)
+and reconfigurable logic (e.g., Convey HC-1 \cite{brewer09} and Cray
+XD1 \cite{Ulmer:2005vh}) for high performance computing (HPC)
 applications. However, the workloads in many computing environments
 are far more dynamic and versatile than those in HPC domain. The
-fusion of general-purpose cores and programmable logics for
+fusion of general-purpose cores and programmable logic for
 power-efficient computing is inadequately investigated in terms of
 architecture trade-offs on performance and power, transparent
 acceleration, and accelerator-aware scheduling, all of which are
@@ -69,7 +68,7 @@ critical to the practical deployment of programmable heterogeneous
 architectures.
 
 We propose {\em Transformer}, a heterogeneous architecture with both
-general purpose cores and on-chip programmable accelerator logics for
+general purpose cores and on-chip programmable accelerator logic for
 addressing the challenges introduced by dynamic workloads in many
 emerging scenarios. This architecture differs from existing works in
 several aspects: (1) the architecture consists of on-chip programmable
@@ -84,11 +83,11 @@ bandwidth utilization and improve speedup of unpredictable workload
 mixtures under given resource constraints; and (3) the architecture
 enables transparent acceleration with novel middleware support,
 significantly reducing deployment costs.  It is worth noting that,
-while the programmable accelerator logics in the proposed architecture
+while the programmable accelerator logic in the proposed architecture
 can be GPU based coprocessors \cite{intel-gpu}, we focus in this paper
-on FPGA-style reconfigurable logics due to the large set of existing IP
+on FPGA-style reconfigurable logic due to the large set of existing IP
 designs available for FPGAs and their improved power
-efficiency. Nevertheless the middleware and scheduling algorithms
+efficiency. Nevertheless, the middleware and scheduling algorithms
 studied in this research are generic enough for benefiting either
 implementation.
 

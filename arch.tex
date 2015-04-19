@@ -49,7 +49,7 @@ when to accelerate function(s).
 
 The reconfigurable logic consists of a static region, a Partial
 Reconfigurable Region (PRR) and an Internal Configuration Access Port
-(ICAP). The static region contains necessary logics other than the
+(ICAP). The static region contains necessary logic other than the
 accelerator PRMs, such as clock module, interconnection interface and
 memory control interface. The PRR can be divided into smaller
 sub-regions and configured with different partial bit streams on
@@ -98,8 +98,8 @@ address. The specifications of the registers are described in Table
 \ref{tbl_AccReg} and the two new instructions are listed as follows.
 
 \begin{enumerate}
-\item{\em readreg n}: read control register set with ID n and put the value into EAX register.
-\item{\em writereg n}: write the value from EAX register into control register set with ID n.
+\item{\em readreg n}: read control register set with ID n.
+\item{\em writereg n}: write the value into control register set with ID n.
 %\item{\em accload AccReg n}: start configuring the type of accelerator
 %  bitstream indicated by AccReg n into the reconfigurable logic. 
 \end{enumerate}

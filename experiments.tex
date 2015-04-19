@@ -15,7 +15,7 @@ frequency is modeled based on the Atom 330 processor, and we set the
 number of cores as eight in the baseline configuration. Later we vary the
 number of cores to explore the area allocation to accelerators and cores. 
 The ICAP interface runs at 100 MHz although over-clocking ICAP is
-possible in practice\cite{Hansen:2011dt}.
+possible in practice \cite{Hansen:2011dt}.
 
 \begin{table}
 \scriptsize
@@ -74,7 +74,7 @@ possible in practice\cite{Hansen:2011dt}.
     Network Bandwidth (MB/s) & 1024\\
     \hline
   \end{tabular}
-\caption{Hardware Specification.}
+\caption{Hardware Specification}
 \label{tbl_parameters}
 \end{center}
 \end{table}
@@ -128,7 +128,7 @@ operating frequencies of cores and reconfigurable logic used in our
 simulations. 
 
 We are interested in understanding the memory access
-patterns (e.g. footprint, data size and frequency) and modeling
+patterns (e.g., footprint, data size and frequency) and modeling
 them in accelerators with high fidelity in the simulations. Towards this goal, we profile the memory
 activities by logging memory access traces for each 
 acceleration function.
@@ -167,7 +167,7 @@ modifying the Multi2Sim cache models. The MOESI cache coherence
 protocol remains effective. TLBs are employed to handle virtual memory
 address translation.  We have studied the impact of the input/output
 buffers size on the performance of {\em Transformer}'s reconfigurable
-logics. The results (not depicted here) reveal that the performance of
+logic. The results (not depicted here) reveal that the performance of
 accelerator increases significantly from 8KB to 32KB, beyond which no
 substantial improvement is observed. So our simulations use 32KB as
 the default buffer size.
@@ -202,7 +202,7 @@ cores.
 
 We first study the effectiveness of {\em Transformer} on single function 
 workloads. A software thread repeatedly executes a single function
-(e.g. 3DES) and then we gradually increase the number of threads. In this setting, both 
+(e.g., 3DES) and then we gradually increase the number of threads. In this setting, both 
 scheduling methods will select the same accelerator since the wrapper function
 intercepts only one kind of library calls. As a result, we only compare the architectures with
 or without accelerators. 
@@ -222,7 +222,7 @@ copies differs from benchmark to benchmark.
 The disparity in reconfigurable resource requirements among benchmarks
 validates the opportunities for combining accelerators. Further
 analysis shows that 3DES accelerator function requires 40\% of 
-the BRAM resources of the reconfigurable logics, so only two copies of
+the BRAM resources of the reconfigurable logic, so only two copies of
 3DES functions can be instantiated. However, other types of
 resources such as LUT remain abundant for accommodating
 functions such as SLAM-C, which requires only 9.2\% of the LUTs and no
@@ -250,14 +250,14 @@ cycle times.
 \begin{figure}
     \centering
     \includegraphics[width=4.5in]{Cycle-8core}
-    \caption{Performance Comparison of Accelerated Architecture and Scheduling Algorithms.}
+    \caption{Performance Comparison of Accelerated Architecture and Scheduling Algorithms}
     \label{fig_8core_cycle}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=4.5in]{Energy-Delay-8core}
-    \caption{Energy-delay Product Comparison.}
+    \caption{Energy-delay Product Comparison}
     \label{fig_8core_energy_delay}
 \end{figure}
 
@@ -311,8 +311,8 @@ respectively. The results of Perfect Prediction scheduling are
 promising, however such ``perfect" prediction never happens with the
 huge dynamics of the workloads in real world. Though ``perfect" in
 prediction, the Perfect Prediction scheduling method does not yield
-``perfect" utilization of the accelerator logics. 
-As we argued in Section \ref{subsec_combo}, maximizing the utilization of reconfigurable logics is one of the contributions in our work to improve system performance and decrease the power consumption. The bandwidth-first scheduling and the speedup-first scheduling, on the contrary, take both accelerator size and performance gain into consideration. Thus, on one hand, bandwidth-first and speedup-first scheduling methods may not be able to compete with the 100\% Perfect Prediction in terms of the prediction accuracy, however on the other hand, their accelerator combination mechanism improves the whole system performance. As shown in Figure \ref{fig_8core_cycle}, speedup-first scheduling resembles the performance of the 90\% Perfect Prediction scheduling and bandwidth-first scheduling matches with the performance of 80\% Perfect Prediction scheduling. 
+``perfect" utilization of the accelerator logic. 
+As we argued in Section \ref{subsec_combo}, maximizing the utilization of reconfigurable logic is one of the contributions in our work to improve system performance and decrease the power consumption. The bandwidth-first scheduling and the speedup-first scheduling, on the contrary, take both accelerator size and performance gain into consideration. Thus, on one hand, bandwidth-first and speedup-first scheduling methods may not be able to compete with the 100\% Perfect Prediction in terms of the prediction accuracy, however on the other hand, their accelerator combination mechanism improves the whole system performance. As shown in Figure \ref{fig_8core_cycle}, speedup-first scheduling resembles the performance of the 90\% Perfect Prediction scheduling and bandwidth-first scheduling matches with the performance of 80\% Perfect Prediction scheduling. 
 \fi
 
 \subsubsection{Performance and Power Analysis with Various Time Window Sizes}
@@ -333,7 +333,7 @@ experiment. We thus set the window size $T$ to be $100 ms$.
 \begin{figure}
     \centering
     \includegraphics[width=4.5in]{Time-Window-Size}
-    \caption{Performance and Power Analysis with Various Time Window Sizes.}
+    \caption{Performance and Power Analysis with Various Time Window Sizes}
     \label{fig_time_window}
 \end{figure}
 
@@ -350,7 +350,7 @@ in Table \ref{tbl_benchmark}) and CPU-bound.
 By design, the
 bandwidth-first strategy prioritizes the utilization of memory
 bandwidth, which inherently gives memory-bandwidth hungry benchmarks
-more chances to take advantage of the accelerator logics. As a result,
+more chances to take advantage of the accelerator logic. As a result,
 this strategy outperforms speedup-first for memory-bound
 applications as shown in Figure \ref{fig_mem_bound}. On the other hand,
 CPU-bound applications benefit more from speedup-first
@@ -359,14 +359,14 @@ scheduling strategy as depicted in Figure \ref{fig_cpu_bound}.
 \begin{figure}
     \centering
     \includegraphics[width=4.5in]{Memory-Bounded}
-    \caption{Performance and Energy Consumption of Memory-bound Benchmark Group.}
+    \caption{Performance and Energy Consumption of Memory-bound Benchmark Group}
     \label{fig_mem_bound}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=4.5in]{CPU-Bounded}
-    \caption{Performance and Energy Consumption on CPU-bound Benchmark Group.}
+    \caption{Performance and Energy Consumption on CPU-bound Benchmark Group}
     \label{fig_cpu_bound}
 \end{figure}
 
@@ -382,9 +382,9 @@ accelerator area ratio given a total area equivalent to four cores
 plus a Spartan 3E like reconfigurable logic unit (default
 accelerator size). As the area of an Atom core is about
     a quarter of Spartan 3E, the combinations of cores and reconfigurable
-logics are 8:0, 6:0.5, and so on. It is very interesting to see
+logic are 8:0, 6:0.5, and so on. It is very interesting to see
  5:0.75 gives the optimal performance gains while more accelerator
-logics keep improve the energy efficiency. While such ratio is
+logic keep improve the energy efficiency. While such ratio is
 specific to the workloads and should be cautiously generalized, 
 our results show that it is important to
 investigate the design space to explore the best possible
@@ -393,7 +393,7 @@ combinations of cores and accelerators.
 \begin{figure}
     \centering
     \includegraphics[width=4.5in]{Core-Acc-Size-Ratio}
-    \caption{Performance and Power with Different Core/Accelerator Ratios.}
+    \caption{Performance and Power with Different Core/Accelerator Ratios}
     \label{fig_core_acc_ratio}
 \end{figure}
 
@@ -423,54 +423,56 @@ power efficiency gain decreases with a steady rate. However, the slope of the ga
 
 Accelerator local buffer works similarly as core's L1 cache. Thus, the characteristics of accelerator local buffer resemble with L1 cache's curves as shown in Figure \ref{fig_acc_buffer_perf} and \ref{fig_acc_buffer_power}. The only difference is that when we gradually change the buffer size, the gain changing rate of local buffer is higher than that of L1 cache. This is because the hardware implementation is more sensitive to the locality of input data since there is more data parallelism in accelerators. 
 
-We also study the inter-arrival time of the Poisson-distributed benchmark mixture to find if the dynamics of the workload will affect the system performance. As illustrated in Figure \ref{fig_benchmark-switching}, we take the 500 million cycles inter-arrival time with naive scheduling as the baseline since ``500 million cycles" is the setup in our experiment. The tendency of the performance gain is dropping when the benchmark inter-arrival time varies from 0 cycle to 1000 million cycles. When inter-arrival time is equal to 0, it is identical with the back-to-back setup of workload. This figure demonstrates that the more frequent change of benchmarks in the workload, the more precise of the profiling-prediction could be, and the more benefit we can gain from the scheduling methods though the overhead of accelerator reprogramming is also increasing. In addition, the performance gain difference is becoming larger between the naive scheduling methods and the other two methods when inter-arrival time increases. This is because the prediction benefit is mitigated when inter-arrival time becomes too large, however, bandwidth-first and speedup-first scheduling still benefit from accelerator combining. 
+We also study the inter-arrival time of the Poisson-distributed benchmark mixture to find if the dynamics of the workload will affect the system performance. As illustrated in Figure \ref{fig_benchmark-switching}, we take the 500 million cycles inter-arrival time with naive scheduling as the baseline since ``500 million cycles" is the setup in our experiment. The tendency of the performance gain is dropping when the benchmark inter-arrival time varies from 0 cycle to 1000 million cycles. When inter-arrival time is equal to 0, it is identical with the back-to-back setup of workload. This figure demonstrates that the more frequent change of benchmarks in the workload, the mor\begin{flushright}
+
+\end{flushright}e precise of the profiling-prediction could be, and the more benefit we can gain from the scheduling methods though the overhead of accelerator reprogramming is also increasing. In addition, the performance gain difference is becoming larger between the naive scheduling methods and the other two methods when inter-arrival time increases. This is because the prediction benefit is mitigated when inter-arrival time becomes too large, however, bandwidth-first and speedup-first scheduling still benefit from accelerator combining. 
 
 \begin{figure}
     \centering
     \includegraphics[width=4.5in]{L1-Cache-Performance}
-    \caption{Performance Gain with Different Sizes of L1 Cache.}
+    \caption{Performance Gain with Different Sizes of L1 Cache}
     \label{fig_l1_perf}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=4.5in]{L1-Cache-Power}
-    \caption{Power Efficiency Gain with Different Sizes of L1 Cache.}
+    \caption{Power Efficiency Gain with Different Sizes of L1 Cache}
     \label{fig_l1_power}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=4.5in]{L2-Cache-Performance}
-    \caption{Performance Gain with Different Sizes of L2 Cache.}
+    \caption{Performance Gain with Different Sizes of L2 Cache}
     \label{fig_l2_perf}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=4.5in]{L2-Cache-Power}
-    \caption{Power Efficiency Gain with Different Sizes of L2 Cache.}
+    \caption{Power Efficiency Gain with Different Sizes of L2 Cache}
     \label{fig_l2_power}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=4.5in]{Acc-Buffer-Performance}
-    \caption{Performance Gain with Different Sizes of Accelerator Local Buffer.}
+    \caption{Performance Gain with Different Sizes of Accelerator Local Buffer}
     \label{fig_acc_buffer_perf}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=4.5in]{Acc-Buffer-Power}
-    \caption{Power Efficiency Gain with Different Sizes of Accelerator Local Buffer.}
+    \caption{Power Efficiency Gain with Different Sizes of Accelerator Local Buffer}
     \label{fig_acc_buffer_power}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=4.5in]{Benchmark-Switching-Time}
-    \caption{Performance Gain with Various Benchmark Inter-arrival Time.}
+    \caption{Performance Gain with Various Benchmark Inter-arrival Time}
     \label{fig_benchmark-switching}
 \end{figure}
 
@@ -485,27 +487,27 @@ resources to demanding functions. Figure \ref{fig_logic_timeline}
 illustrates how the utilization of various resources within the
 reconfigurable logic changes over time.
 
-Figure \ref{fig_acc_timeline}  also validates the advantages of run-time
+Figure \ref{fig_acc_timeline} also validates the advantages of run-time
 configuration over fixed accelerators. We observe the maximum number of each
 accelerators as: 3DES, SURF, Segmentation and Smith-waterman - 1
 instantiation, IDSI and SLAM-J - 2 instantiations, SLAM-C and Jacobi -
-3 instantiations. To achieve the same performance, the total logics we
+3 instantiations. To achieve the same performance, the total logic we
 would need if we rely on fixed onchip accelerators are: SLICE - 17848, FF
 - 14511, LUT - 13192, BRAM - 255. That is, we would need at least 3.8 times
 more SLICE and 12.75 times more BRAM to perform comparably as {\em Transformer}. 
-This is a example for your.
+This is an example of inefficient use of reconfigurable resources.
 
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=6.0in]{Acc_timeline}
-    \caption{Accelerator Usage Timeline.}
+    \caption{Accelerator Usage Timeline}
     \label{fig_acc_timeline}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=6.0in]{Logic-Usage-Timeline}
-    \caption{Total Logic Usage Timeline.}
+    \caption{Total Logic Usage Timeline}
     \label{fig_logic_timeline}
 \end{figure}

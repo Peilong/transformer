@@ -11,12 +11,12 @@ workloads periodically. The heart of reprogramming hardware
 accelerators at run-time lies in the algorithms and mechanisms to
 identify software functions to accelerate with the goals of sharing
 the memory/logic resources and maximizing the resource utilizations of
-reconfigurable logics. Since reprogramming the accelerator logic 
+reconfigurable logic. Since reprogramming the accelerator logic 
 introduces a delay, we do not want the overheads of
 reprogramming to outweigh the benefits of accelerating time-consuming
 tasks. We propose a reconfiguration controller which addresses three
 questions: (1) how to track the demands of candidate workloads; (2)
-when to reprogram the acceleration logics; and (3) which accelerator
+when to reprogram the acceleration logic; and (3) which accelerator
 or combination of accelerators should be instantiated.
 
 
@@ -42,7 +42,7 @@ functions to accelerate. Tracking demands requires a table
 lookup and a table update, i.e. only two memory operations (one
 read and one write). The overheads of maintaining counters are trivial even when the number
 of accelerators scales up to hundreds, this is because such counter
-update is only once per a library function call, and the library function itself is typically very time-consuming (e.g. in millions of cycles). The counters
+update is only once per a library function call, and the library function itself is typically very time-consuming (e.g., in millions of cycles). The counters
 are reset periodically to record the most recent demands. 
 
 

@@ -10,8 +10,7 @@ As each accelerator function consumes a certain amount of
 on-chip resources such as LUT, memory, and data access
 bandwidth to achieve a particular speedup factor, as shown in Table
 \ref{tbl_benchmark}, the choice of accelerators to maximize gains
-under resource constraint is a combinatorial optimization problem, i.e.
-knapsack problem. We will discuss two variants of knapsack problem
+under resource constraint is a combinatorial optimization problem, i.e., knapsack problem. We will discuss two variants of knapsack problem
 applicable in our accelerator scheduling algorithm: one is 0-1
 knapsack problem, i.e., an acceleration function is either chosen or not
 chosen;  the other is bounded knapsack problem: up to $n$ copies of
@@ -59,7 +58,7 @@ Jacobi        & 1201  & 25.8  & 1431 & 15.4 & 1218 & 13.1  & 2    & 10   & 1112 
 
 \end{tabular} 
 \caption{Benchmark accelerator logic cost, bandwidth, speedup and
-  power. {\em (Use Xilinx SPARTAN 3E as a reference)}} 
+  power {\em (Use Xilinx SPARTAN 3E as a reference)}} 
 \label{tbl_benchmark}
 \end{center}
 \end{table*}
@@ -72,8 +71,8 @@ speedup) are derived from the open source synthesizable accelerator
 store \cite{accstore}. We measure their memory bandwidth with Intel
 VTune Amplifier XE \cite{vtune}. The speedup of each accelerator is
 calculated by dividing execution time of one iteration of the software
-benchmark on a 1.6GHz single core by its corresponding hardware design
-on a 200MHz FPGA. {\em Transformer} applies Xilinx Spartan-3E XC3S500E
+benchmark on a 1.6 GHz single core by its corresponding hardware design
+on a 200 MHz FPGA. {\em Transformer} applies Xilinx Spartan-3E XC3S500E
 FPGA \cite{spartan3e} as a reference on-chip accelerator, which has a
 comparable number of transistors ({$100\sim300$ million (500K gates)})
 as eight Atom 330 cores ({$\sim 47$ million per core})
@@ -81,7 +80,7 @@ as eight Atom 330 cores ({$\sim 47$ million per core})
 9312, FF is 9312, DSP48 is 768 and BRAM is 20. We also show the
 percentage of resource consumption of each acceleration function. It
 can be observed that the numbers of SLICEs and BRAMs are two major
-resource constraints.  Therefore, we reduce the multi-dimensional
+resource constraints. Therefore, we reduce the multi-dimensional
 knapsack problem to a two-dimension problem. That is, we consider the
 percentage of SLICEs and BRAMs of each benchmark as the two weights in
 the knapsack model. The memory bandwidth utilization and speedup are

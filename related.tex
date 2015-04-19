@@ -1,6 +1,6 @@
 \section{Related Work}
 \label{sec_related}
-Cong et al. in \cite{accrich,cong-islped12,cong-saw11} propose a
+Cong et al. \cite{accrich,cong-islped12,cong-saw11} propose a
 heterogeneous architecture called CHARM with loosely-coupled on-chip
 accelerators. By composing the accelerator building blocks, the
 architecture can dynamically speed up medical imaging benchmarks (up
@@ -23,7 +23,7 @@ acceleration functions accordingly. CHARM, on the other hand,
 emphasizes on sharing the existing accelerators among software
 threads, lacking the ability of coping with emerging workloads at
 run-time; (b) Transformer incorporates a centralized reconfigurable
-logic, instead of distributed fine-grained accelerator blocks in
+logic, instead of distributed fine-grained accelerator blocks in other works 
 \cite{accrich}, to improve the area utilization. The chip
 resource dedicated to the acceleration logic can be re-programmed and
 shared by multiple accelerator engines for different functions, thanks
@@ -32,8 +32,8 @@ combining accelerators on-demand for maximizing memory bandwidth
 utilization or speedup effect; and (c) Transformer has a set of
 middleware innovations that avoid rewriting user applications with a
 library-oriented coarse-grained approach. This is supported by the
-growing set of available soft IP cores for reconfigurable logics
-\cite{opencores,design-reuse,free-ip}. On the contrary, CHARM requires
+growing set of available soft IP cores for reconfigurable logic
+\cite{opencores,design-reuse,free-ip}. In contrast, CHARM requires
 rewriting user code.
 
 Govindaraju et al. propose {\em DySER} with both functionality and
@@ -100,14 +100,14 @@ Huang et al. propose an aggregate gain algorithm (AG)
 \cite{Huang:2009hs} to predict future acceleration requirement of the
 workload. This prediction mechanism may work properly on some specific
 domain of computing, however, cloud workloads are too dynamic to be
-accurately predicted. Also in \cite{Huang:2009hs}, cache coherency is not considered and the
+accurately predicted. Also in Huang's work, cache coherency is not considered and the
 number of LUTs is the only resource constraint. {\em Transformer}
 maintains coherency on both cores' caches and accelerators' local
 memory and considers constraints of all logic resources (LUT, BRAM,
 SLICE, etc.).
 
 
-In \cite{Mignolet:2003gr}, Mignolet et al. introduce a feasible way of
+Mignolet et al. \cite{Mignolet:2003gr} introduce a feasible way of
 relocating tasks between software path and accelerated hardware
 path. They implement a new OS (OS4RS) which contains a hardware
 abstraction layer and a communication interface to enable OS tasking
@@ -127,7 +127,7 @@ reprogrammability, Cray XD1 differs from {\em Transformer} in two
 aspects: (a) reconfigurable logic on Cray XD1 is an off-chip
 coprocessor which communicates with CPUs under the control of Rapid
 Array Processors whereas {\em Transformer} integrates reconfigurable
-logics onto the SoC, permitting on-chip data sharing with cores and (b)
+logic onto the SoC, permitting on-chip data sharing with cores and (b)
 to utilize the coprocessors on Cray XD1, users need to apply the
 vendor-provided FPGA Linux API into their software design. In
 contrast, {\em Transformer} provides a transparent scheme of invoking
@@ -151,20 +151,19 @@ not have access to the source code used or owned by the customers in a
 cloud computing environment. This makes c-core ineffective in such scenarios. {\em Transformer}'s middleware approach based on wrapper library imposes no requirements on source code access, therefore is feasible for a wide range of applications. 
 
 Given the reprogramming/partial-reconfiguration costs of FPGA-type of
-logics (in the order of tens or hundreds of milliseconds depending on
+logic (in the order of tens or hundreds of milliseconds depending on
 the size of bit streams \cite{Liu:2009ie}), the benefits of adapting
 the accelerator functions at run-time must outweigh such
-costs. Characterization on cloud computing workloads in
-\cite{CloudWorkload} has demonstrated that the lifetime of various
-applications ranges from 300 to 86400 seconds, implying that an
-accelerated function would be used for a considerable duration.  This
+costs. Characterization on cloud computing workloads has demonstrated that the lifetime of various
+applications ranges from 300 to 86400 seconds \cite{CloudWorkload}, implying that an
+accelerated function would be used for a considerable duration. This
 validates our rationale of reprogramming accelerators with different
 functions on-demand.
 
 Our proposed architecture is built atop of partial reconfiguration
 technology such as XILINX Dynamic Partial Reconfiguration (DPR)
 \cite{PRUserGuide} to reduce reconfiguration time while not
-interrupting the operation of other logics. For example, in Xilinx DPR
+interrupting the operation of other logic. For example, in Xilinx DPR
 design process, a library of hardware modules called Partially
 Reconfigurable Modules (PRMs) and their corresponding Partial Bit
 Streams (PBS) are created in advance. 
