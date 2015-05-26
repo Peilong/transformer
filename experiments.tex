@@ -11,10 +11,10 @@ by extending Multi2Sim - a superscalar, multithreaded and multicore
 simulator - with a reconfigurable accelerator unit. 
  The specification of our simulated architecture is shown in Table
 \ref{tbl_parameters}. The processor core technology and operating
-frequency is modeled based on the Atom 330 processor, and we set the
-number of cores as eight in the baseline configuration. Later we vary the
-number of cores to explore the area allocation to accelerators and cores. 
-The ICAP interface runs at 100 MHz although over-clocking ICAP is
+frequency are modeled based on the Atom 330 processor. We set the
+number of cores to be eight in the baseline configuration. Afterwards, we vary the
+number of cores to explore the area allocation to the accelerators as well as the cores. 
+The ICAP interface runs at 100 MHz, although over-clocking ICAP is
 possible in practice \cite{Hansen:2011dt}.
 
 \begin{table}
@@ -29,7 +29,7 @@ possible in practice \cite{Hansen:2011dt}.
 	\hline
 	Core Spec & 45nm @ 1.6 GHz \\
 	\hline
-	Accelerator Spec& 45nm @ 200 MHz \\
+	Accelerator Spec & 45nm @ 200 MHz \\
 	\hline
 	ICAP & 32 bit bus width @ 100 MHz \\
 	\hline
@@ -80,78 +80,78 @@ possible in practice \cite{Hansen:2011dt}.
 \end{table}
 
 
-To model the profiling and scheduling overheads in the simulations,
-we evaluate the overhead of the profiler within the wrapper function and the
-three scheduling methods - na\"{\i}ve, bandwidth-first or speedup-first. For
-the worse case, the profiler and wrapper function's overhead takes up
-to 0.017 \% per profiling window time and the worse case happens only
+To model the profiling and scheduling overheads within the simulations,
+we evaluate the overhead of the profiler in the wrapper function and the
+three scheduling methods: na\"{\i}ve, bandwidth-first, or speedup-first. For
+the worst case, the profiler and the wrapper function's overhead takes up
+to 0.017 \% per profiling window.  The worst case occurs only
 when the reconfiguration controller accepts the current acceleration
 request within the profiling window. The two knapsack combination
-scheduling algorithms introduce more overhead than na\"{\i}ve scheduling. However, further evaluation shows that the overhead of both bandwidth-first and speedup-first algorithms introduce an neglectable overhead of 0.130 \% per profiling window. 
+scheduling algorithms introduce more overhead than the na\"{\i}ve scheduling. However, further evaluation shows that the overhead of both the bandwidth-first and the speedup-first algorithms introduce a neglectable overhead of 0.130 \% per profiling window. 
 
 \subsection{Benchmarks}
-We use all the eight acceleration functions from the
+We use all eight acceleration functions from the
 open-source accelerator store \cite{accstore} to build a synthetic
-workload that simulates dynamic workloads in cloud and mobile
-environments (we defer using real-world cloud applications to our
-future work).  These applications cover a wide range of areas
+workload that simulates the dynamic workloads within cloud and mobile
+environments.  In this case, we defer using real-world cloud applications to our
+future work.  These applications cover a wide range of areas
 including encryption/decryption ({\em 3DES} \cite{openssl}), numerical
 calculation ({\em Jacobi} \cite{jacobi-wiki}), vision and navigation
 ({\em SLAM-C and SLAM-J} \cite{openslam}), feature detection (SURF and
 IDSI \cite{opencv}), image processing ({\em Segmentation}
 \cite{segmentation-wiki}) and bioinformatics ({\em Smith-Waterman}
-\cite{smithwaterman-wiki}). Besides, these software applications have
-corresponding accelerator implementation which provide
-performance/area details. Minor modifications are done to generate the
+\cite{smithwaterman-wiki}). Moreover, the aforementioned software applications have
+corresponding accelerator implementations which provide
+performance as well as area allocation details. Minor modifications were done in order to generate the
 final benchmark mixture, including preparing the input data set for
-each function and creating multiple threads.
+each function as well as the creation of multiple threads.
 
 To emulate the dynamics of workload arrival, we model the inter-arrival time between
-each benchmark as Poisson distribution. The average
-inter-arrival time is set as 500 million cycles (312.5 ms
-in real time if system is running at 1.6 GHz), which is close to the
-cycle time of one iteration of our shortest benchmark IDSI. We compare
-this Poisson arrival pattern with default pattern - continuous
-arrival, i.e. inter-arrival time is zero.
+each benchmark as a Poisson distribution. The average
+inter-arrival time is set to 500 million cycles, 312.5 ms
+in real time if the system is running at 1.6 GHz, which in turn is close to the
+cycle time of one iteration for our shortest benchmark IDSI. We compare
+the Poisson arrival pattern with the default pattern of continuous
+arrival, where the inter-arrival time is zero.
 
 \subsection{Modeling Accelerators}
 As there is no accelerator modeled in the stock Multi2Sim simulator,
-so we modify a general purpose core to simulate a reconfigurable
-accelerator unit. We make our best effort to model the
-computation, memory access and reconfiguration delays  based
-upon prior work and our own studies on the benchmarks. 
+ a general purpose core is modified to simulate a reconfigurable
+accelerator unit. A best effort is made to model the
+computation, the memory access, along with the reconfiguration delays based
+upon prior work as well as our own benchmark studies. 
 
 We model the timing of each accelerator by using their different
 speedup values reported in the prior work as listed in Table
 \ref{tbl_benchmark}. The speedup numbers are scaled to the 
-operating frequencies of cores and reconfigurable logic used in our
+operating frequencies for each core core as well as the reconfigurable logic used in our
 simulations. 
 
 We are interested in understanding the memory access
-patterns (e.g., footprint, data size and frequency) and modeling
-them in accelerators with high fidelity in the simulations. Towards this goal, we profile the memory
-activities by logging memory access traces for each 
+patterns, specifically the footprint, the data size and the frequency.  Furthermore, we are interested in modeling
+the patterns within the accelerators using a series of high fidelity simulations. Towards this end, we profile the memory
+activities by logging the memory access traces for each 
 acceleration function.
-Figure \ref{fig_mem_access} illustrates the memory access pattern of
-two benchmark applications: Jacobi and SLAM-J. The horizontal axis is
-the time of the access, and the vertical axis is the address within a
+Figure \ref{fig_mem_access} illustrates the memory access pattern for
+two benchmark applications: Jacobi and SLAM-J. The horizontal axis represents
+the time of the access, while the vertical axis represents the address within a given 
 page range. In this way, we observe the temporal and spatial
 characteristics of the memory accesses. It can be seen that {\em
-  Jacobi} has a much larger number of  accesses than SLAM-J, and the
-accesses span over a wider address range. We model such memory
-access patterns when simulating accelerators, besides visually
-differentiating memory bound applications from the computation intensive
-ones. 
+  Jacobi} has larger number of accesses and that the
+accesses span a wider address range. We model similar memory
+access patterns when simulating the accelerators.  In addition, we visually
+differentiate memory bound applications from computationally intensive
+applications. 
 
-The overhead of a DMA transfer is modeled with the approximation
-formula from \cite{Saidi:2012}: $ T(s) = I + \alpha \times b \times
-s$, where $I$ is the fixed initial cost which includes command issuing
-and TLB translation, $\alpha$ is the transfer cost rate in
-$cycle/byte$, $b$ is the basic block size and $s$ is the super block
-size. Since DMA command and TLB translation are already modeled in wrapper libraries and the
-stock Multi2Sim simulator separately, $I$ is 0 in this case. We choose $\alpha$
-as 2 cycles/byte as an average number \cite{Saidi:2012}. $b$ and $s$
-are determined by specific functions.
+The overhead of a DMA transfer is modeled within the approximation
+formula derived from \cite{Saidi:2012}: $ T(s) = I + \alpha \times b \times
+s$, where $I$ is the fixed initial cost, which includes issuing commands
+along with the TLB translation, $\alpha$ is the transfer cost rate in
+$cycles/byte$, $b$ is the basic block size, and $s$ is the super block
+size. Given that the DMA command along with the TLB translation are already modeled separately within the wrapper libraries and
+the stock Multi2Sim simulator, $I$ is set to 0 in this case. We choose $\alpha$
+to be 2 cycles/byte as an average number \cite{Saidi:2012}. The variables $b$ and $s$
+are to be determined by the appropriately relevant functions.
 
 
 \begin{figure}
@@ -162,36 +162,37 @@ are determined by specific functions.
 \end{figure}
 
 
-The input/output buffers on each of the accelerators are modeled by
-modifying the Multi2Sim cache models. The MOESI cache coherence
-protocol remains effective. TLBs are employed to handle virtual memory
-address translation.  We have studied the impact of the input/output
-buffers size on the performance of {\em Transformer}'s reconfigurable
-logic. The results (not depicted here) reveal that the performance of
-accelerator increases significantly from 8KB to 32KB, beyond which no
-substantial improvement is observed. So our simulations use 32KB as
+The IO buffers on each of the accelerators are modeled by
+modifying the Multi2Sim cache models. In this case, the MOESI cache coherence
+protocol remains effective. The TLBs are employed to handle the virtual memory
+address translation.  We have studied the impact of the size of the IO
+buffers on the performance of the {\em Transformer}'s reconfigurable
+logic. The results, which are not depicted here, reveal that the performance of
+the accelerator increases significantly from 8KB to 32KB, beyond which no
+substantial improvement is observed. As a result, our simulations use 32KB as
 the default buffer size.
 
 The partial reconfiguration delay $T_R$ is modeled as $ T_R = \frac{S_{pbs}}{ B_{ICAP} / C_{ICAP}} $,
 where $S_{pbs}$ is the size of
 partial bitstream, and $B_{ICAP}$ and $C_{ICAP}$ are the bus bandwidth
-and cycle time of ICAP.
-Since partial reconfiguration time depends on the size of partial bit
-stream, we conservatively model the reconfiguration time with the
-largest bitstream size among all the benchmarks in our simulations. 
+as well as the cycle time for ICAP.
+Since the partial reconfiguration time depends on the size of the partial bit
+stream, we conservatively model the reconfiguration time using the
+largest bitstream size observed amongst all of the benchmarks within our simulations. 
 
 
 \subsection{Power Model}
-The general purpose cores' dynamic and static power consumption are
-estimated by using HP McPat v0.8 \cite{mcpat}. The power consumption of reconfigurable logic
-is modeled as follows. We keep track of the numbers of
-each logic elements (SLICE, FF, DSP48, BRAM, etc.) used by the
-accelerator functions at run time, and use them as input data to Xilinx Power Estimator
-\cite{xpe} for calculating reconfigurable logic's power consumption.  
-We scale the power of the reconfigurable logic to the 45 nm technology
-so that both cores and accelerators are at the same technology
-scale. The total power consumption is the sum of the power of
-reconfigurable logic  and  the power number reported by McPat for the
+The dynamic and static power consumption of the general purpose cores are
+estimated by using HP McPat v0.8 \cite{mcpat}. The power consumption of the reconfigurable logic
+is modeled as follows. We track the number of
+logic elements used by the accelerator functions at run time, 
+including the number SLICE, FF, DSP48, and BRAM elements. The number of each logic element type serves as the input data to the 
+Xilinx Power Estimator
+\cite{xpe}, which serves to calculate the reconfigurable logic's power consumption.  
+We scale the power of the reconfigurable logic to the 45 nm technology scale
+so that both the cores and the accelerators are at the same technology
+level. The total power consumption is the sum of the power of
+the reconfigurable logic as well as the power reported by McPat for each of the
 cores. 
 
 
@@ -200,33 +201,33 @@ cores.
 
 \subsubsection{Speedup of Multiple Copies of a Single Workload}
 
-We first study the effectiveness of {\em Transformer} on single function 
-workloads. A software thread repeatedly executes a single function
-(e.g., 3DES) and then we gradually increase the number of threads. In this setting, both 
+We first study the effectiveness of the {\em Transformer} on single function 
+workloads. A software thread repeatedly executes a single function, such as the 3DES function,
+ and then we gradually increase the number of threads. In this setting, both 
 scheduling methods will select the same accelerator since the wrapper function
-intercepts only one kind of library calls. As a result, we only compare the architectures with
+intercepts only one kind of library call. As a result, we only compare the architectures with
 or without accelerators. 
-Figure \ref{fig_num_of_apps} shows that the performance speedup on the y
-axis while the x axis shows the increasing number of threads. The
-baseline performance is the execution time of $k$ threads on multicore
-architecture without the accelerator. We can
-observe that the speedup for 3DES is significant ($\sim14\times$) when the number of threads is
-within two, beyond which the speedup reduces. This is because the
-resources available in the accelerator logic only allow up to two
-3DES accelerator functions instantiated. The remainder of the threads
-end up being executed as software on the cores, so the speedup is not
-as significant as earlier cases.  Other functions
+Figure \ref{fig_num_of_apps} displays the performance speedup on the y
+axis while the x axis displays the number of threads. The
+baseline performance is the execution time for the $k$ threads on a multicore
+architecture without an accelerator. We 
+observe that the speedup for the 3DES function is significant, $\sim14\times$, when the number of threads is
+approximately two, beyond which the speedup decreases. In this case the
+resources available within the accelerator logic only allows up to two
+3DES accelerator functions to be instantiated. The remaining threads
+are executed as software within the cores.  As a result, the level of speedup is not
+as significant as the ones observed within the earlier cases.  Other functions
 experience similar trends but the number of acceleration function
 copies differs from benchmark to benchmark.   
 
-The disparity in reconfigurable resource requirements among benchmarks
-validates the opportunities for combining accelerators. Further
-analysis shows that 3DES accelerator function requires 40\% of 
-the BRAM resources of the reconfigurable logic, so only two copies of
+The disparity in the reconfigurable resource requirements among benchmarks
+validates the observed opportunities for combining accelerators. Further
+analysis indicates that the 3DES accelerator function requires 40\% of 
+the BRAM resources of the reconfigurable logic, so that only two copies of
 3DES functions can be instantiated. However, other types of
-resources such as LUT remain abundant for accommodating
-functions such as SLAM-C, which requires only 9.2\% of the LUTs and no
-BRAMs. We later illustrate the run-time accelerator instantiation and combination in Figure
+resources such as the LUT remain abundant when accommodating
+functions such as SLAM-C, which requires only 9.2\% of the LUTs and none of the
+BRAMs. Below, we illustrate the run-time accelerator instantiation and combination within Figure
 \ref{fig_acc_timeline}.   
 
 \begin{figure}
@@ -238,13 +239,13 @@ BRAMs. We later illustrate the run-time accelerator instantiation and combinatio
 
 \subsubsection{Speedup and Energy Efficiency of Workload Mixtures}
 
-With a mixture of the workloads, the instantiation of accelerator
-functions is subject to the run-time demands and the logic resource
-constraints. We execute the synthetic workloads on {\em Transformer} with eight
-cores and one reconfigurable logic unit of the size of an Xilinx
-Spartan 3E. The workload's arrival follows either a Poisson process or
-a back-to-back fashion. We issue 100 thousand billion instructions of
-the benchmark bundle and record the number of completed functions and
+Given a mixture of the workloads, the instantiation of accelerator
+functions is subject to the run-time demands as well as the constraints of the logic resources.
+ We execute the synthetic workloads on the {\em Transformer} with eight
+cores and one reconfigurable logic unit, which in this case matches the size of one Xilinx
+Spartan 3E FPGA. The workload's arrival either follows a Poisson distribution or
+a continuous back-to-back distribution. We issue 100 thousand billion instructions of
+the benchmark bundle and record the number of completed functions as well as the
 cycle times. 
 
 \begin{figure}
@@ -262,45 +263,46 @@ cycle times.
 \end{figure}
 
 Figure \ref{fig_8core_cycle} depicts the performance of different
-scheduling methods. Its x-axis denotes different
-architectures and scheduling methods, such as ``W/O Acc" (without
-accelerator), ``W/ Acc, 100\% Perfect" (with accelerator and 100\%
-perfect prediction accuracy of the incoming workloads), ``W/ Acc,
-Random" (with accelerator and randomly schedule incoming workload to
-either CPU or accelerators), ``W/ Acc, Acc-First" (with accelerator
-and schedule workload to accelerators with the first priority), ``W/
-Acc, Naive" (with accelerator and profiling only),``W/ Acc, BW-First"
-(with accelerator and profiling plus bandwidth-first scheduling), and
-``W/ Acc, Speedup-First" (with accelerator and speedup-first
-scheduling). The y-axis is normalized execution time.
+scheduling methods. The x-axis denotes different
+architectures as well as scheduling methods, including:
+ no accelerator, ``W/O Acc",
+ with the accelerator and 100\% perfect prediction accuracy of the incoming workloads, ``W/ Acc, 100\% Perfect",
+ with the accelerator and randomly scheduled incoming workloads to either the CPU or the accelerators, ``W/ Acc, Random",
+ with the accelerator and the workload scheduled to accelerators with first priority, ``W/ Acc, Acc-First",
+ with the accelerator and only profiling used, ``W/Acc, Naive", 
+ with the accelerator and profiling plus bandwidth-first scheduling, ``W/ Acc, BW-First",
+ with the accelerator and speedup-first scheduling ``W/ Acc, Speedup-First"
+ The y-axis displays the normalized execution time.
 
-The accelerated architectures delivers up to $2.3\times$ improvement on the performance
-compared to a multicore architecture without an accelerator. It is
-worth noting that such speedup is achieved on a highly dynamic
-workload bundle of which the processor has no prior knowledge of the
-workload types and arrival times. All the profiling is done at run-time and the
+The accelerated architectures deliver a factor of up to $2.3\times$ improvement in terms of performance as 
+compared with a multicore architecture without an accelerator. It is
+worth noting that the aforementioned speedup was achieved with a highly dynamic
+workload bundle for which the processor has no prior knowledge of the
+workload types or the arrival times. All the profiling is done at run-time and the
 scheduling of the accelerator is autonomously performed by the
-middleware (wrapper library). The workload following a Poisson arrival
-process has longer execution time because there are idle cycles
-between function calls. However, Poisson arrival provides more dynamic
-combination of workload arriving at different time, and that's why we
-observe a larger speedup ($1.46/0.63\simeq2.3\times$) comparing with the
-back-to-back arrival ($1/0.49\simeq2\times$). 
+middleware wrapper library. The workload following a Poisson distribution
+ resulted in a longer execution time as a result of the idle cycles
+between each of the function calls. However, the Poisson distribution provides for dynamic
+ combinations of workload arrival times, resulting in a
+ larger observed speedup, $1.46/0.63\simeq2.3\times$, as compared with the
+back-to-back arrival, $1/0.49\simeq2\times$. 
 
 The energy-delay product depicted in Figure
-\ref{fig_8core_energy_delay} show that the power efficiency of {\em
- Transformer} improves by up to ($2.01/0.29\simeq6.9\times$) as the workloads migrate to
-energy-efficient accelerators due to the scheduling and run-time
+\ref{fig_8core_energy_delay} indicates that the power efficiency of the {\em
+ Transformer} produces an improvement up to ($2.01/0.29\simeq6.9\times$) as the workloads migrate to
+the energy efficient accelerators resulting from the scheduling along with the run-time
 reprogramming.
 
 
 
-From comparing with other different scheduling methods, we find ours
-to be close to the ``Perfect Prediction'' scheduling. The perfect
-prediction scheduling scheme can hypothetically predict precisely
-the demands from incoming workloads. Such best possible scheduling
-strategy provides us the best value of performance and power
-efficiency that could be achieved with the given hardware. We can see that our proposed speedup-first and bandwidth-first scheduling heuristic can achieve close performance (in terms of execution time) and energy-delay-product with the ``90\% Perfect'' scheduling and ``80\% Perfect'' scheduling, respectively. The detailed
+In comparison with other scheduling methods, we find ours
+to be closely aligned with ``Perfect Prediction'' scheduling. In theory, the perfect
+prediction scheduling scheme precisely predicts
+the demands on the system based upon the incoming workloads. The aforementioned best possible scheduling
+strategy provides us with the best performance and power
+efficiency that is achievable with the given hardware. We see that our proposed speedup-first, bandwidth-first scheduling heuristic can
+ achieve similar performance, in terms of execution time, as well as an energy-delay-product, with ``90\% Perfect'' scheduling and 
+``80\% Perfect'' scheduling, respectively. The detailed
 results are depicted in Figures \ref{fig_8core_cycle} and \ref{fig_8core_energy_delay}.  
 
 \if 0
@@ -316,15 +318,20 @@ As we argued in Section \ref{subsec_combo}, maximizing the utilization of reconf
 \fi
 
 \subsubsection{Performance and Power Analysis with Various Time Window Sizes}
-One of the basic parameter setups of the experiment is the choice of profiling time window $T$. As we mention in \ref{subsec_ranking}, bad choice of $T$ will bring either oversampling or inaccuracy. Thus, we implement a series of experiments to find the optimal $T$ that could be used for our benchmarks. 
-We take the non-accelerated scenario as the baseline, and compare the performance and power efficiency gain of naive scheduling over the baseline with different profiling time window sizes. The experiment results are shown in Figure \ref{fig_time_window}.
 
-Both performance and power efficiency gain increase when $T$ goes up
-from $1 ms$ to $100 ms$, stay in the plateau stage when $T$ locates
-around $100 ms$ to $1000 ms$, and sharply drop when $T$ goes beyond
-$1000 ms$, where the drop is caused by the accuracy loss of profiling
-method when down-sampling the benchmarks. According to the results,
-$[10 ms, 1000 ms]$ is a reasonable range to choose $T$ in our
+One of the basic parameter setups of the experiment is the choice for the profiling time window $T$. As we mention in \ref{subsec_ranking}, 
+an inappropriate choice for the value of $T$ will result in either oversampling or inaccuracy. 
+Thus, we implement a series of experiments in order to find the optimal value for $T$, one which can be used for our benchmarks. 
+We take the non-accelerated scenario as our baseline. In addition, we compare the performance and power efficiency gain of the
+ naive scheduling algorithm over the baseline case with different values for the profiling time window size. 
+The experiment results are shown in Figure \ref{fig_time_window}.
+
+The performance and the power efficiency increases as $T$ increases
+from $1 ms$ to $100 ms$. Furthermore, the performance and the power efficiency plateau as $T$ remains between
+ $100 ms$ to $1000 ms$.  In addition, the performance and the power efficiency decrease dramatically as $T$ increases beyond
+$1000 ms$. The observed drop is the result of a loss in accuracy within the profiling
+method as the benchmarks are down-sampled. According to the results, the range 
+$[10 ms, 1000 ms]$ results in an acceptable value for $T$ within our
 experiment. We thus set the window size $T$ to be $100 ms$.
 %We also notice that the performance gain and power
 %efficiency gain is still positive when $t = 1 ms$ tough sampling rate
@@ -337,23 +344,22 @@ experiment. We thus set the window size $T$ to be $100 ms$.
     \label{fig_time_window}
 \end{figure}
 
-\subsubsection{Impact of Accelerator Scheduling on Memory-bound vs
-  CPU-bound Applications}
+\subsubsection{Impact of Accelerator Scheduling on Memory-bound vs CPU-bound Applications}
 
 We study the impact of the two scheduling heuristics, bandwidth-first
-and speedup-first, on different types of workloads, and compare the
-heuristics with na\"{\i}ve scheduling (just use calculated priority
-rank $P_x$).  We construct two workload bundles based on the memory
-access intensity of benchmarks: memory-bound (bandwidth over 500MB/s
-in Table \ref{tbl_benchmark}) and CPU-bound.
+and speedup-first, for different types of workloads. Furthermore, we compare each of the
+heuristics to na\"{\i}ve scheduling, in which case we simply use the calculated priority
+rank $P_x$.  We construct two workload bundles based on the memory
+access intensity for the benchmarks. The first workload bundle is memory-bound, with a bandwidth of over 500MB/s as shown in 
+in Table \ref{tbl_benchmark}. The second workload bundle is CPU-bound.
 
 By design, the
 bandwidth-first strategy prioritizes the utilization of memory
-bandwidth, which inherently gives memory-bandwidth hungry benchmarks
-more chances to take advantage of the accelerator logic. As a result,
+bandwidth, which inherently gives benchmarks hungry for memory-bandwidth
+more opportunities to take advantage of the accelerator logic. As a result,
 this strategy outperforms speedup-first for memory-bound
 applications as shown in Figure \ref{fig_mem_bound}. On the other hand,
-CPU-bound applications benefit more from speedup-first
+CPU-bound applications benefit more from the speedup-first
 scheduling strategy as depicted in Figure \ref{fig_cpu_bound}.
 
 \begin{figure}
@@ -373,22 +379,22 @@ scheduling strategy as depicted in Figure \ref{fig_cpu_bound}.
 
 \subsubsection{Chip Area Allocation}
 
-It is very interesting to understand how we should allocate chip
-area to cores and programmable accelerators, given a limit on the chip
-area. We vary the number of cores and the size of the
+Given the limited chip area, one particular area of interest is the method utilized for allocating space
+ to each of the cores as well as the programmable accelerators.
+We vary the number of cores and the size of the
 reconfigurable logic to explore the design space. Figure
-\ref{fig_core_acc_ratio} is obtained by changing the core and
-accelerator area ratio given a total area equivalent to four cores
-plus a Spartan 3E like reconfigurable logic unit (default
-accelerator size). As the area of an Atom core is about
-    a quarter of Spartan 3E, the combinations of cores and reconfigurable
-logic are 8:0, 6:0.5, and so on. It is very interesting to see
- 5:0.75 gives the optimal performance gains while more accelerator
-logic keep improve the energy efficiency. While such ratio is
-specific to the workloads and should be cautiously generalized, 
-our results show that it is important to
-investigate the design space to explore the best possible
-combinations of cores and accelerators. 
+\ref{fig_core_acc_ratio} was obtained by changing the core and
+the accelerator area ratio given a total area equivalent to four cores
+as well as a reconfigurable logic unit, which in this case was a default accelerator size similar to the one used
+by the Spartan 3E FPGA. As the area of an Atom core is about
+    one fourth the size of a Spartan 3E FPGA, the resulting combinations for the cores and the reconfigurable
+logic include 8:0, 6:0.5, and so forth. It is interesting to note that the
+ 5:0.75 ratio produces optimal performance gains while increasing the accelerator
+logic continually improves the energy efficiency. While the ratios are
+specific to each of the workloads and therefore can only be generalized with caution, 
+our results indicate that it is important to
+investigate the design space in order to determine the best possible
+arrangement for the cores as well as the accelerators. 
 
 \begin{figure}
     \centering
@@ -398,34 +404,50 @@ combinations of cores and accelerators.
 \end{figure}
 
 \subsubsection{Architectural Parameter Analysis}
+
 One of the contributions of this work is to provide insights into how
 different parameters of the heterogeneous architecture or the
-benchmark will affect the performance and power efficiency on the
-heterogeneous architecture. Thus, we study the same performance and
-energy efficiency metrics with different architecture parameters to
-render better understandings of their implications. 
+benchmark will affect the performance and the power efficiency of the
+resulting heterogeneous architecture. Thus, we explore the same performance and
+energy efficiency metrics with respect to different architectural parameters in order to
+ better understand their implications. 
 
-We first study L1 cache size as shown in Figure \ref{fig_l1_perf}. Our
-system with 32 KB L1 cache and naive scheduling is considered as the
-baseline in this experiment. The performance gain increases fast when
-L1 cache size changes from 8 KB to 32 KB - around 12\% to 14\%;
-however the increase slows down when cache size changes beyond 32
-KB. This result means that 32 KB of L1 cache is relatively large
-enough for our benchmarks. Power efficiency, on the other hand, drops
-steadily when cache size increases as shown in Figure
-\ref{fig_l1_power}. This is because the increase of cache size will
-greatly increase both static and dynamic power. 
+First, we study the effects of the L1 cache size as shown in Figure \ref{fig_l1_perf}. Our
+system consisting of 32 KB of L1 cache employing a na\"{\i}ve scheduling algorithm is considered as the
+baseline for this experiment. The performance gain increases rapidly as the
+L1 cache size changes from 8 KB to 32 KB, specifically between 12\% to 14\%.
+However, the performance gains decrease as the cache size increases beyond 32
+KB. The aforementioned findings indicate that 32 KB of L1 cache is sufficiently large
+ for our benchmarks. As shown in Figure
+\ref{fig_l1_power}, the power efficiency decreases
+steadily as the cache size increases. In this case, the increase in the cache size 
+tends to significantly increase both the static power as well as the dynamic power. 
 
-We conduct a similar experiment by changing L2 cache size, and show
-the results in Figure \ref{fig_l2_perf} and \ref{fig_l2_power}. When
-we increase the size of L2 cache, the performance gain increases and
-power efficiency gain decreases with a steady rate. However, the slope of the gain is much higher than that in L1 cache's results. That is partially because accelerators and CPUs share the L2 cache with MOESI coherence. So when cache size increases, the heterogeneous architecture benefits from the lower rate of cache miss. 
+We conduct a similar experiment by changing the L2 cache size, displaying
+the results in Figure \ref{fig_l2_perf} and \ref{fig_l2_power}. As
+we increase the size of the L2 cache, the performance gain increases while the
+power efficiency gain steadily decreases. However, the slope of the gain is significantly larger by comparison with the results obtained for 
+the L1 cache. In this case, the accelerators and the CPUs share the L2 cache with the MOESI coherence. As a result, when the cache size 
+increases, the heterogeneous architecture benefits from the lower cache miss rate. 
 
-Accelerator local buffer works similarly as core's L1 cache. Thus, the characteristics of accelerator local buffer resemble with L1 cache's curves as shown in Figure \ref{fig_acc_buffer_perf} and \ref{fig_acc_buffer_power}. The only difference is that when we gradually change the buffer size, the gain changing rate of local buffer is higher than that of L1 cache. This is because the hardware implementation is more sensitive to the locality of input data since there is more data parallelism in accelerators. 
+The accelerator's local buffer works in similar manner to the core's L1 cache. Thus, the characteristics of the accelerator local buffer 
+resemble the charactertics of the L1 cache as shown in Figure \ref{fig_acc_buffer_perf} and \ref{fig_acc_buffer_power}. 
+The only difference is that as we adjust the buffer size, the rate of change for the gains of the local buffer is larger 
+by comparison with the L1 cache. In this case the hardware implementation is more sensitive to the locality of the input data
+ given that there is a higher level of data parallelism within the accelerators. 
 
-We also study the inter-arrival time of the Poisson-distributed benchmark mixture to find if the dynamics of the workload will affect the system performance. As illustrated in Figure \ref{fig_benchmark-switching}, we take the 500 million cycles inter-arrival time with naive scheduling as the baseline since ``500 million cycles" is the setup in our experiment. The tendency of the performance gain is dropping when the benchmark inter-arrival time varies from 0 cycle to 1000 million cycles. When inter-arrival time is equal to 0, it is identical with the back-to-back setup of workload. This figure demonstrates that the more frequent change of benchmarks in the workload, the mor\begin{flushright}
+We also study the inter-arrival time of the Poisson-distributed benchmark mixture to find if the dynamics of the workload will affect 
+system performance. As illustrated in Figure \ref{fig_benchmark-switching}, we take the 500 million cycles inter-arrival time with na\"{\i}ve
+ scheduling as the baseline since ``500 million cycles" is the setup in our experiment. The performance gain tends to decrease as 
+the benchmark inter-arrival time varies from 0 cycles to 1000 million cycles. When the inter-arrival time is set to 0 cycles, it becomes
+ identical to the continuously arriving back-to-back workload. This figure demonstrates that the more frequent the change in the workload of 
+the benchmarks, the more\begin{flushright}
 
-\end{flushright}e precise of the profiling-prediction could be, and the more benefit we can gain from the scheduling methods though the overhead of accelerator reprogramming is also increasing. In addition, the performance gain difference is becoming larger between the naive scheduling methods and the other two methods when inter-arrival time increases. This is because the prediction benefit is mitigated when inter-arrival time becomes too large, however, bandwidth-first and speedup-first scheduling still benefit from accelerator combining. 
+\end{flushright} precise the profiling-prediction, and the larger the gains from the scheduling methods. The aforementiond gains
+are realized in spite of the increasing overhead due to accelerator reprogramming. In addition, as the inter-arrival time increases, 
+the difference in the performance gains increases when comparing the na\"{\i}ve scheduling methods with the other two methods. 
+In this case, the benefits of prediction decrease as the inter-arrival time becomes significantly large. However, both the bandwidth-first and
+ the speedup-first scheduling algorithms benefit from accelerator combination. 
 
 \begin{figure}
     \centering
@@ -479,23 +501,23 @@ We also study the inter-arrival time of the Poisson-distributed benchmark mixtur
 \subsubsection{Utilization of Reconfigurable Resources}
 
 Figure \ref{fig_acc_timeline} shows a sample of the run-time
-reconfiguration process on the {\em Transformer}. The x axis is the
-scheduling time window, and the y axis is the number of acceleration
+reconfiguration process on the {\em Transformer}. The x axis displays the
+scheduling time window, while the y axis displays the number of acceleration
 functions instantiated on the SoC. Figure \ref{fig_acc_timeline}
-reveals the dynamics of the workload and how {Transformer} adapts its
-resources to demanding functions. Figure \ref{fig_logic_timeline}
+reveals the dynamics of the workload and how the {\em Transformer} adapts its
+resources to the demanding functions. Figure \ref{fig_logic_timeline}
 illustrates how the utilization of various resources within the
 reconfigurable logic changes over time.
 
-Figure \ref{fig_acc_timeline} also validates the advantages of run-time
-configuration over fixed accelerators. We observe the maximum number of each
-accelerators as: 3DES, SURF, Segmentation and Smith-waterman - 1
-instantiation, IDSI and SLAM-J - 2 instantiations, SLAM-C and Jacobi -
-3 instantiations. To achieve the same performance, the total logic we
-would need if we rely on fixed onchip accelerators are: SLICE - 17848, FF
-- 14511, LUT - 13192, BRAM - 255. That is, we would need at least 3.8 times
-more SLICE and 12.75 times more BRAM to perform comparably as {\em Transformer}. 
-This is an example of inefficient use of reconfigurable resources.
+In addition, Figure \ref{fig_acc_timeline} validates the advantages of using run-time
+configuration over fixed accelerators. We make the following observations regarding the maximum number of accelerators. 
+The 3DES, SURF, Segmentation, and Smith-waterman functions all resulted in one
+instantiation. The IDSI as well as the SLAM-J functions resulted in two instantiations. The SLAM-C as well as Jacobi functions resulted in 
+three instantiations. To achieve the same performance relying on the fixed on-chip accelerators, 
+the total amount of logic we would need includes: 17,848 SLICE elements, 14,511 FF elements, 13,192 LUT elements, and 255 BRAM elements. 
+Specifically, we would need at least 3.8 times
+more SLICE elements and 12.75 times more BRAM elements in order to perform comparably with the {\em Transformer}. 
+The aforementioned findings serve as an example of the inefficient use of reconfigurable resources.
 
 
 \begin{figure}[ht]

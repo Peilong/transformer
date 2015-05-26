@@ -1,27 +1,27 @@
 \section{Conclusion}
 \label{sec_concl}
 
-In this paper, we propose a heterogeneous architecture {\em
-  Transformer} with an on-chip, partial reconfigurable logic to
-transparently accelerate dynamic unpredictable workloads.
-Reconfiguration controller and middleware are introduced to trace the
-run-time demands of the accelerator functions and invoke acceleration
-path. We derive two scheduling algorithms based on solving Knapsack
-problem to combine accelerators. We model the details of
+In this paper, we propose a heterogeneous architecture, the {\em
+  Transformer}, consisting of on-chip, partially reconfigurable logic in order to
+transparently accelerate dynamic, unpredictable workloads.
+Middleware as well as the reconfiguration controller are introduced in order to trace the
+run-time demands of the accelerator functions and invoke the acceleration
+path. We derive two scheduling algorithms based on solving the Knapsack
+problem in order to combine accelerators. We model the details of the
 accelerators in a modified Multi2sim simulator and evaluate the
-performance and power efficiency of {\em Transformer} with synthetic
-workloads from a wide range of domains. The performance and power
+performance and the power efficiency of the {\em Transformer} with synthetic
+workloads from a wide range of domains. The resulting performance and power
 efficiency gains are shown to be significant. We study how the 
-architectural parameters impact the system performance and power. We
-investigate the chip area allocation to cores and accelerators, and make interesting observations on the optimal partition of resources. 
+architectural parameters impact system performance and power. We
+investigate the issues of chip area allocation with respect to the cores as well as the accelerators, and make notable observations 
+regarding the optimal partitioning of the resources. 
 
 In the near future, we plan to explore finer granularity
-of reconfigurable resources and accelerator-aware NoC to maximize the
-performance of {\em Transformer}. We also plan to compare {\em Transformer}
-with ASIC-based accelerators which require much effort in VLSI
-implementations. A FPGA-based prototype (with soft cores and partial
-reconfiguration) running real-world workloads obtained from cloud
-servers is in the works.
+reconfigurable resources and accelerator-aware NoC to maximize the
+performance of the {\em Transformer}. We also plan to compare the {\em Transformer}
+with ASIC-based accelerators, which have significantly greater demands in terms of their VLSI
+implementations. Furthermore, an FPGA-based prototype running real-world workloads obtained from cloud
+servers is currently in development.
 
 %In this paper, we propose a hybrid architecture with both general
 %purpose cores and reconfigurable logic accelerators for power

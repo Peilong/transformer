@@ -1,177 +1,175 @@
 \section{Related Work}
 \label{sec_related}
 Cong et al. \cite{accrich,cong-islped12,cong-saw11} propose a
-heterogeneous architecture called CHARM with loosely-coupled on-chip
+heterogeneous architecture called CHARM consisting of loosely-coupled on-chip
 accelerators. By composing the accelerator building blocks, the
-architecture can dynamically speed up medical imaging benchmarks (up
-to 3.7x) and show energy consumption reduction by up to 4.7x.  In
-spite of its effectiveness in computation acceleration, this
-accelerator-rich architecture introduces new accelerator instructions and
-requires recompiling applications, lacking the run-time
+architecture is able to dynamically speed up medical imaging benchmarks by a factor of
+to 3.7$\times$ while reducing energy consumption by a factor of 4.7$\times$.  In
+spite of its effectiveness in terms of computation acceleration, this
+accelerator-rich architecture introduces new accelerator instructions,
+requires recompiling the applications, and in turn lacks run-time
 reconfigurability.  Garcia et al. propose software based kernel sharing in a
 multiprocessor system with reconfigurable hardware
-	\cite{Garcia:2008iy}. This concept is similar with CHARM as both
-of them emphasize the strategies on how to best utilize the existing
+	\cite{Garcia:2008iy}. This concept is similar to CHARM in terms of the emphasis upon strategies that best utilize the existing
 accelerator.
 
-Our work differs from CHARM \cite{accrich,cong-islped12,cong-saw11} as
-follows: (a) Transformer is targeted at cloud and mobile applications
-where the execution environment has to handle dynamics of the
-workloads as they arrive and depart at unpredictable time. So
-Transformer focuses on run-time profiling workloads and reprogramming
-acceleration functions accordingly. CHARM, on the other hand,
-emphasizes on sharing the existing accelerators among software
-threads, lacking the ability of coping with emerging workloads at
-run-time; (b) Transformer incorporates a centralized reconfigurable
-logic, instead of distributed fine-grained accelerator blocks in other works 
-\cite{accrich}, to improve the area utilization. The chip
-resource dedicated to the acceleration logic can be re-programmed and
-shared by multiple accelerator engines for different functions, thanks
-to the partial reconfiguration technology.  We develop heuristics to
-combining accelerators on-demand for maximizing memory bandwidth
-utilization or speedup effect; and (c) Transformer has a set of
+Our work differs from CHARM \cite{accrich,cong-islped12,cong-saw11} in several ways.
+First, the ``{\em Transformer}'' is targeted at cloud and mobile applications
+where the execution environment has to be able to cope with the dynamics of
+unpredictable workloads that can arrive or depart at any time. The proposed solution
+ focuses on profiling the workloads at run-time and dynamically reprogramming
+the acceleration functions. In contrast, CHARM 
+emphasizes sharing the existing accelerators amongst the software
+threads, and lacks the ability to cope with emerging workloads at
+run-time. Second, in order to improve area resource utilization, the ``{\em Transformer}'' incorporates 
+centrally located reconfigurable logic, instead of distributed fine-grained accelerator blocks
+\cite{accrich}. Thanks to the partial reconfiguration technology, the chip
+resources dedicated to the acceleration logic can be re-programmed and
+shared by multiple accelerator engines for different functions.
+In order to maximize memory bandwidth utilization as well as the improvements in terms of speed,
+we develop heuristics that combine accelerators on-demand.
+Third, the ``{\em Transformer}'' has a set of
 middleware innovations that avoid rewriting user applications with a
 library-oriented coarse-grained approach. This is supported by the
 growing set of available soft IP cores for reconfigurable logic
-\cite{opencores,design-reuse,free-ip}. In contrast, CHARM requires
+\cite{opencores,design-reuse,free-ip}. By comparison, CHARM requires
 rewriting user code.
 
-Govindaraju et al. propose {\em DySER} with both functionality and
-data parallelism specialization \cite{Govindaraju:2012fn,Govindaraju:HPCA11}. DySER
-provides the feasibility of dynamically specializing execution
-resources and creating various data path for parallelizable
-``hot-spot'' in workload, and thus improve the performance and energy
-efficiency. {\em Transformer}, in another research direction, aims at
-coarse-grained acceleration at the level of a library function. {\em
-  DySER} relies on a compiler to partition hot spots into compute and
-data subregions and offload to dynamically formed functional
-units. Without compiler assistance, {\em Transformer} contains
-hardware and middleware to perform run-time reconfiguration to avoid
-recompilation, supporting the acceleration of closed-source
-executables.
+Govindaraju et al. propose {\em DySER}, which contains specialization in terms of both functionality and
+data parallelism \cite{Govindaraju:2012fn,Govindaraju:HPCA11}. DySER
+provides a feasibile solution that dynamically specializes execution
+resources and creates various data paths for a parallelizable
+``hot-spot'' in the workload. The net result leads to improvements in terms of performance and energy
+efficiency. By taking a different approach, the {\em Transformer} aims at developing
+coarse-grained acceleration at the level of a library function. On the one hand,
+{\em DySER} relies on the compiler to partition hot spots consisting of compute and
+data subregions, which can then be offloaded to dynamically formed functional
+units. On the other hand, the {\em Transformer} is able to accelerate closed-source executables independently of the compiler, and contains
+the necessary hardware and middleware to perform run-time reconfiguration to avoid
+recompilation.
 
-{\em Garp} \cite{Garp:1997,Garp:2000} and {\em Transformer} target on
-the same direction: that is, improving computation performance and power
-efficiency with FPGA-based parallelization. However, the two
-architectures focus on different granularities of parallelism. Similar
-to {\em DySER}, {\em Garp} targets on a finer granularity with the
-optimization of basic operations to achieve instruction level
-parallelism. Such parallelization heavily relies on a compiler because the compiler needs to
-precisely identify the potential parallelizable code and map the code
-to an acceleration block in a way that its performance could be
-improved. The penalty of imprecise identification is significant at such instruction level granularity.
+Both {\em Garp} \cite{Garp:1997,Garp:2000} and the {\em Transformer} aim to improve computation performance and power
+efficiency through FPGA-based parallelization. However, the two
+architectures focus on different levels of granularity in terms of parallelism. Similar
+to {\em DySER}, {\em Garp} targets finer granularity by
+optimizing basic operations in order to achieve instruction level
+parallelism. This form of parallelization is heavily reliant upon the compiler given the necessity of
+precisely identifying potentially parallelizable code and the mapping of that code
+to an acceleration block in a way that leads to performance improvements.
+At the instruction level, the penalty of imprecise identification can be significant.
 %Otherwise, the compiler optimized code might compromise the
 %performance. 
-Our approach focuses on the optimization at library (function) level,
-considering the data sharing and computation in a global
-view, so it usually guarantees performance improvement. We always know
-an optimized version on FPGA outperforms the CPU version of the same
-function with tens or even hundreds of speedup. We just need to make
-sure to plug in the right accelerator at the right time to tackle with
-the dynamics of the workload. The profiling and scheduling methods are applicable to fine-granularity acceleration too.
+Our approach focuses on performing optimization at the library level.
+The probability of performance improvements increases by considering the issues of data sharing and computation from a global
+perspective. 
+An optimized version of a function on an FPGA can outperform the CPU version of the same
+function by a factor of ten or even one-hundred in terms of speedup. The only requirement is to 
+plug in the right accelerator at the right time to tackle the
+the dynamics of the workload. Profiling and scheduling methods can also be applied with respect to fine-granularity acceleration.
 
 Other works such as HiPPAI \cite{Stillwell:2009if} and EXOCHI
-\cite{Wang:2007bc} propose new programming environment or interface
-for hardware accelerated SoC platform. HiPPAI abstracts a layer of
-accelerator interface in OS to schedule task either onto the
+\cite{Wang:2007bc} propose new programming environments or interfaces
+for hardware accelerated SoC platforms. HiPPAI abstracts a layer of the
+accelerator interface within the OS in order to schedule tasks either to the
 accelerator or to the general purpose core. However, this layer of
-abstraction lacks the awareness of the run-time dynamics on the
-accelerator. In contrast, we propose a reconfiguration controller to
-keep track of the usage information on logic and make 
-efficient use of the logic resource, without requiring reprogramming. 
+abstraction lacks the awareness of the run-time dynamics within the
+accelerator. By contrast, we propose a reconfiguration controller that
+ tracks usage information within the logic, thereby using 
+the logic resources efficiently without the need for reprogramming. 
 
-Towards high performance big data applications, LINQits is proposed as
+With respect to high performance big data applications, LINQits is proposed as
 a flexible hardware template that can be mapped onto programmable
-logic or ASICs in a heterogeneous system-on-chip for a mobile device
-or a server \cite{Chung:2013:LBD:2485922.2485945}. LINQits accelerates a domain-specific query
-language called LINQ, and LINQits requires applications (re-)written with
-LINQ for taking advantage of hardware acceleration. 
+logic or ASICs in a heterogeneous system-on-chip for mobile devices
+or servers \cite{Chung:2013:LBD:2485922.2485945}. LINQits is designed to accelerate a domain-specific query
+language called LINQ.  As a result, LINQits requires that applications either be written or rewritten with
+LINQ in order to take advantage of the hardware acceleration. 
 
 While the LINQits architecture has similarities with our proposed {\em
-  Transformer} architecture in a ``core + FPGA'' form, there exist
-notable differences between them: (a) {\em Transformer} is a
+  Transformer} architecture, taking on a ``core + FPGA'' form, there exist
+notable differences between them. First, the {\em Transformer} is a
 generic architecture not tied to a particular application domain
-whereas LINQits is designed and optimized for big data applications; 
-and (b) no rewriting or recompiling application is needed in {\em Transformer} while
-LINQits relies on rewriting applications with LINQ language
-constructs, which are not applicable for non-database applications.
+whereas LINQits is designed and optimized for big data applications.
+Second, no rewriting or recompilation of applications is required with the {\em Transformer}.  
+By constrast, LINQits requires that applications be written with LINQ language
+constructs, which are not applicable to non-database applications.
 
 Huang et al. propose an aggregate gain algorithm (AG)
-\cite{Huang:2009hs} to predict future acceleration requirement of the
-workload. This prediction mechanism may work properly on some specific
-domain of computing, however, cloud workloads are too dynamic to be
-accurately predicted. Also in Huang's work, cache coherency is not considered and the
-number of LUTs is the only resource constraint. {\em Transformer}
-maintains coherency on both cores' caches and accelerators' local
-memory and considers constraints of all logic resources (LUT, BRAM,
-SLICE, etc.).
+\cite{Huang:2009hs} in order to predict the future acceleration requirements of the
+workload. This prediction mechanism may work properly within a subset of specific
+ computing domains, however, cloud workloads are too dynamic to be
+accurately predicted. Furthermore, Huang's work does not consider cache coherency, while the
+number of LUTs serves as the only resource constraint. By comparison, the {\em Transformer}
+maintains coherency in terms of the cache for each core as well as the local memory for each accelerator.
+In addition, the {\em Transformer} considers the constraints of all the logic resources, which includes 
+but is not limited to the LUT, the BRAM, as well as the SLICE.
 
 
 Mignolet et al. \cite{Mignolet:2003gr} introduce a feasible way of
-relocating tasks between software path and accelerated hardware
+relocating tasks between the software path and the accelerated hardware
 path. They implement a new OS (OS4RS) which contains a hardware
-abstraction layer and a communication interface to enable OS tasking
+abstraction layer and a communication interface to enable OS task
 scheduling between software and hardware. 
-However, {\em Transformer} does not require changes to OS
-layer. Instead, transparent acceleration in {\em Transformer} is
-achieved with a wrapper library which resides at the middleware layer,
-improving the portability of the design.
+However, the {\em Transformer} does not require changes to the OS
+layer. Instead, transparent acceleration in the {\em Transformer} is
+achieved by way of a wrapper library which resides at the middleware layer,
+thus improving the portability of the design.
 
 
 Supercomputers pursue the highest computation performance
-\cite{Ulmer:2005vh} with supports of FPGAs. For instance, each node
-(six nodes in a chassis) in Cray XD1 integrates one Xilinx Virtex-4
+\cite{Ulmer:2005vh} through the support of FPGAs. For instance, each node
+ out of the six nodes within a Cray XD1 chassis integrates one Xilinx Virtex-4 FPGA
 connected via a RadipArray Interconnect to four memory banks shared
-with two AMD Opteron processors. Though both providing run-time
-reprogrammability, Cray XD1 differs from {\em Transformer} in two
-aspects: (a) reconfigurable logic on Cray XD1 is an off-chip
-coprocessor which communicates with CPUs under the control of Rapid
-Array Processors whereas {\em Transformer} integrates reconfigurable
-logic onto the SoC, permitting on-chip data sharing with cores and (b)
-to utilize the coprocessors on Cray XD1, users need to apply the
+between two AMD Opteron processors. Though both provide run-time
+reprogrammability, Cray XD1 differs from the {\em Transformer} in two
+aspects.
+First, the reconfigurable logic on the Cray XD1 consists of an off-chip
+coprocessor which communicates with the CPUs under the control of Rapid
+Array Processors whereas the {\em Transformer} integrates the reconfigurable
+logic onto the SoC, permitting on-chip data sharing between the cores.
+Second, in order to utilize the coprocessors located on the Cray XD1, users need to incorporate the
 vendor-provided FPGA Linux API into their software design. In
-contrast, {\em Transformer} provides a transparent scheme of invoking
-accelerators.
+contrast, the {\em Transformer} provides a transparent scheme for invoking
+the accelerators.
 
-As an ``extreme" form on fixed specialization, conservation cores
+As an ``extreme" form of fixed specialization, conservation cores
 \cite{Venkatesh:2010:CCR:1735970.1736044,Venkatesh:2010:CCR:1736020.1736044,Venkatesh:2010:CCR:1735971.1736044},
 or c-cores, are specialized processors that focus only on energy and
 energy-delay efficiency rather than improving performance. C-cores
-provides a promising reduction of energy consumption (up to
-16.0$\times$ for specific functions and up to 2.1$\times$ for whole
-application), which is comparable with {\em Transformer}'s energy
-efficiency (up to 6.9$\times$), at the risk of compromising the
-performance. However, we argue that QoS is one of the most important
-concerns for most of the cloud service provider, that is, providing
+provide a promising reduction in terms of energy consumption, up to
+16.0$\times$ for specific functions and up to 2.1$\times$ for the whole
+application, at the risk of compromising performance.  The {\em Transformer} produces a comparable reduction in energy
+consumption by a factor of up to 6.9$\times$ without the risk of compromising performance. 
+However, we argue that QoS is one of the most important
+concerns for most cloud service providers, specifically in terms of providing
 the best user experience. Thus, the balance between performance and
-power consumption should be carefully considered. {\em Transformer}
-provides a solution that considers both performance and power aspects
-in cloud services. In addition, the service provider typically does
-not have access to the source code used or owned by the customers in a
-cloud computing environment. This makes c-core ineffective in such scenarios. {\em Transformer}'s middleware approach based on wrapper library imposes no requirements on source code access, therefore is feasible for a wide range of applications. 
+power consumption should be placed under careful consideration. The {\em Transformer}
+provides a solution that considers both the performance and the power aspects
+for cloud services. In addition, the service provider typically does
+not have access to the source code used or owned by the customers within a
+cloud computing environment. As a result, c-cores become ineffective within such scenarios. The {\em Transformer}'s middleware approach, based on a wrapper library, imposes no requirements on source code access, and therefore is feasible for a wide range of applications. 
 
-Given the reprogramming/partial-reconfiguration costs of FPGA-type of
-logic (in the order of tens or hundreds of milliseconds depending on
-the size of bit streams \cite{Liu:2009ie}), the benefits of adapting
-the accelerator functions at run-time must outweigh such
-costs. Characterization on cloud computing workloads has demonstrated that the lifetime of various
-applications ranges from 300 to 86400 seconds \cite{CloudWorkload}, implying that an
-accelerated function would be used for a considerable duration. This
-validates our rationale of reprogramming accelerators with different
+Given the reprogramming and partial-reconfiguration costs for FPGA-type
+logic, ranging in the order of tens to hundreds of milliseconds depending on
+the size of the bit stream \cite{Liu:2009ie}), the benefits of adapting
+the accelerator functions at run-time outweigh the previously stated
+costs. Characterization of cloud computing workloads has demonstrated that the lifetime of various
+applications ranges from 300 seconds to 86400 seconds \cite{CloudWorkload}, implying that an
+accelerated function would be used for a considerable duration of time. The preceding findings give impetus
+for reprogramming accelerators with different
 functions on-demand.
 
-Our proposed architecture is built atop of partial reconfiguration
-technology such as XILINX Dynamic Partial Reconfiguration (DPR)
-\cite{PRUserGuide} to reduce reconfiguration time while not
-interrupting the operation of other logic. For example, in Xilinx DPR
-design process, a library of hardware modules called Partially
-Reconfigurable Modules (PRMs) and their corresponding Partial Bit
-Streams (PBS) are created in advance. 
+Our proposed architecture is built on top of partial reconfiguration
+technology, such as the XILINX Dynamic Partial Reconfiguration (DPR) technology
+\cite{PRUserGuide}, in order to reduce the reconfiguration time without
+interrupting the operation of other logic. For example, in the Xilinx DPR
+design process, a library of hardware modules, called Partially
+Reconfigurable Modules (PRMs), and their corresponding Partial Bit
+Streams (PBSs) are created in advance. 
 %The circuits that are not configurable during runtime are called Static Region. 
-During runtime, PBSs are configured to a region on device called
+During runtime, PBSs are configured to a region on the device referred to as the
 Partial Reconfigurable Region (PRR) through a primitive configuration
-module known as Internal Configuration Access Port (ICAP)
-\cite{Hansen:2011dt,Liu:2009ie,McDonald:2008ec}. We leverage ICAP-like
+module known as the Internal Configuration Access Port (ICAP)
+\cite{Hansen:2011dt,Liu:2009ie,McDonald:2008ec}. We leverage the ICAP-like
 structure to reprogram the configurable logic on demand.
 
 

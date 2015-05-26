@@ -4,96 +4,94 @@
 \subsection{Overview}
 \label{subsec_runtime_reconfig_overview}
 
-Run-time reconfiguration refers to the action taken by the controller
-to make decisions on when to accelerate certain software libraries
-based on run-time workload characteristics, and how to assess the
+Run-time reconfiguration refers to the decisions made by the controller
+to accelerate certain software libraries, 
+as determined by the run-time workload characteristics, as well as how to effectively assess the
 workloads periodically. The heart of reprogramming hardware
-accelerators at run-time lies in the algorithms and mechanisms to
-identify software functions to accelerate with the goals of sharing
-the memory/logic resources and maximizing the resource utilizations of
+accelerators at run-time lies in the algorithms as well as the mechanisms employed to
+identify software functions that should be accelerated, keeping in mind the goals of sharing
+the memory and logic resources as well as maximizing the resource utilization of the
 reconfigurable logic. Since reprogramming the accelerator logic 
-introduces a delay, we do not want the overheads of
-reprogramming to outweigh the benefits of accelerating time-consuming
+introduces a delay, we do not want the aforementioned overhead to outweigh the benefits of accelerating time-consuming
 tasks. We propose a reconfiguration controller which addresses three
-questions: (1) how to track the demands of candidate workloads; (2)
-when to reprogram the acceleration logic; and (3) which accelerator
-or combination of accelerators should be instantiated.
+questions.
+First, what it the most effective way to track the demands of the candidate workloads? 
+Second, when should the acceleration logic be reprogrammed?
+Third, which accelerator or combination of accelerators should be instantiated?
 
 
-We answer these three questions in two steps:
-(1) demand tracking and (2) request scheduling. As described in
-Section \ref{sec_transacc}, in the first step we intercept all the
+The aforementioned questions are answered in two steps:
+demand tracking and request scheduling. As described in
+Section \ref{sec_transacc}, the first step is to intercept all of the
 library calls with wrapper functions and keep track of the demands
 using a table of counters called Request Counters (RC). The RCs
-are regarded as a request log with updated information in the most
-recent time window. In the second step, we apply heuristic algorithms to
-schedule the requested function in hardware accelerators, and we
-explain the algorithms in Section \ref{subsec_combo}. 
+are regarded as a request log that contains updated information for the most
+recent time window. In the second step, heuristic algorithms are applied in order to
+schedule the requested function within the hardware accelerators. 
+The corresponding algorithms are described in Section \ref{subsec_combo}. 
 
 \subsection{Demand Tracking} 
 
 The demands of computing a candidate function are tracked by the
 wrapper function library. The library maintains a table of candidate
-hardware accelerators and the functions that they speed up. Each call
-to a function is intercepted and recorded by the wrapper function, and used as an
-index to the table to increment the corresponding request counter. The
-counters are input metrics to the scheduling algorithm to determine which
-functions to accelerate. Tracking demands requires a table
-lookup and a table update, i.e. only two memory operations (one
-read and one write). The overheads of maintaining counters are trivial even when the number
-of accelerators scales up to hundreds, this is because such counter
-update is only once per a library function call, and the library function itself is typically very time-consuming (e.g., in millions of cycles). The counters
-are reset periodically to record the most recent demands. 
+hardware accelerators along with the corresponding functions they are designed to speed up. Each call
+to a function is intercepted and recorded by the wrapper function, which is then used as an
+index into the table in order to increment the corresponding request counter. The
+counters serve as input metrics to the scheduling algorithm, which determines the appropriate
+functions to accelerate. Tracking the demands only requires performing two memory operations, a table
+lookup, a read, followed by a table update, a write.
+The overhead of maintaining the counters is trivial, even when the number
+of accelerators scales into the hundreds. Specifically, each counter
+update is only performed once for each library function call.  By comparison, the library function itself is typically time-consuming, in the order millions of cycles. Moreover, the counters are reset periodically in order to record the most recent demands. 
 
 
-At the presence of dynamic workloads and heterogeneous processing
-elements (general-purpose cores and programmable accelerators), the
-candidate functions to accelerate could be multiple and
-time-dependent. The workload acceleration turns into an optimization
+In the presence of dynamic workloads and heterogeneous processing
+elements, which include general-purpose cores as well as programmable accelerators, there
+could be multiple, time-dependent candidate functions to accelerate.
+ The acceleration of the workload turns into an optimization
 problem where the objective is to schedule tasks on multiple
-processors for minimizing the execution time. As Hochbaum et
-al. prove that similar scheduling on uniform processors is NP-hard
+processors in order to minimize the execution time. Given that Hochbaum et
+al. have proven similar scheduling on uniform processors is NP-hard
 \cite{hochbaum88}, the scheduling on heterogeneous processing 
-elements is also NP-hard. Therefore we derive heuristics to address
-the remaining two questions: specifically we address question (2) with
-the heuristics on determining the timing of reconfiguration in
-Section \ref{subsec_ranking}, and question (3) with heuristics on
+elements must also be NP-hard. Therefore, we derive heuristics to address
+the remaining two questions.
+ Specifically, we address the second question with
+the heuristics for determining the reconfiguration timing in
+Section \ref{subsec_ranking}, and the third question with the heuristics for
 scheduling and combining accelerators in Section \ref{subsec_combo}.
 
 \subsection{Request Ranking}
 \label{subsec_ranking}
 
-Each time when function acceleration requests are detected by the
+Each time function acceleration requests are detected by the
 wrapper library, we increment the corresponding request counter in a
 time window of length $T$ before resetting it in the next window. 
-We are not only interested in the number of calls within $T$, but also the {\em changes} in the demands
-between subsequent time windows. This is because the dynamic workloads
-could experience demand fluctuation, therefore historical trend in the
-past time windows is as important as the number of calls in one or
-multiple time windows.
-Smaller $T$ leads to frequent counter resets and can trace the trend
-of demands in a finer granularity, whereas large $T$ avoids
-oversampling the demands and reprogramming the accelerators more
-frequently than necessary. So the value of $T$ should be chosen
-appropriately such that it does not add significant overheads when
-comparing to the execution time of applications under study, and it is
-enough to capture very detailed demand changes of acceleration
-requests. 
+Not only are we interested in the number of calls within a time window $T$, but also the {\em changes} in the demands
+between subsequent time windows. Specifically, the dynamic workloads
+could experience demand fluctuation, implying that the historical trend in the
+past time windows is just as important as the number of calls in one or
+more time windows.
+Smaller values for $T$ lead to frequent counter resets and trace the trend
+of demands with finer granularity, while larger values for $T$ avoid
+oversampling the demands as well as uneccessarily frequent reprogramming of the accelerators. Therefore, the value of $T$ should be chosen
+appropriately such that it does not add significant overhead when
+comparing the execution times of the applications under study, while being sufficient
+to capture the details of the changes in demand for the acceleration requests. 
 
 We maintain an array of counters $C(x, i)$ collected in the past $R$
 time windows, where $x$ represents the corresponding accelerator
-function and $1<i<R$. At run time, we would have an $f \times R$
+function and $1<i<R$. At run time, there exists an $f \times R$
 matrix $M$ that reflects the demands for $f$ accelerator functions in
 the past $R$ time windows.  After obtaining $M$, we use the following
 two metrics to evaluate the total demand $D_x$ and the rate of demand
 changes $DC_x$ for every function $x$: $D_{x} = \sum_{i=1}^{H}C(x,i)$
 and $DC_{x} = \sum_{i=1}^{H-1}(|C(x, i+1)-C(x, i)|)$.  The priority
 $P_x$ of function $x$ is then calculated as $P_x = a \times D_x +
-(1-a) \times DC_x$. We set $a$ as 0.5 in our implementation because we
-regard the changes of demand as important as the total demands. $P_x$
-is used to rank the accelerators requests in a descending
-order. Changes in the ranking from the past time window trigger
-reprogramming the accelerator functions in the on-chip logic. We regard this scheduling strategy as the baseline and denote it as ``na\"{\i}ve'' in the performance evaluation.
+(1-a) \times DC_x$. We set $a$ to be 0.5 in our implementation given that we
+regard the changes in demand to be as important as the total number of demands. $P_x$
+is used to rank the accelerators requests in descending
+order. Changes that occur in the ranking from the past time window trigger
+reprogramming the accelerator functions in the on-chip logic. We regard the aforementioned scheduling strategy as the baseline and denote it as ``na\"{\i}ve'' in the performance evaluation.
 
 \input{knapsack}
 
