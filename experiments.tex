@@ -97,8 +97,8 @@ environments.  In this case, we defer using real-world cloud applications to our
 future work.  These applications cover a wide range of areas
 including encryption/decryption ({\em 3DES} \cite{openssl}), numerical
 calculation ({\em Jacobi} \cite{jacobi-wiki}), vision and navigation
-({\em SLAM-C and SLAM-J} \cite{openslam}), feature detection (SURF and
-IDSI \cite{opencv}), image processing ({\em Segmentation}
+({\em SLAM-C and SLAM-J} \cite{openslam}), feature detection ({\em SURF} and
+{\em IDSI} \cite{opencv}), image processing ({\em Segmentation}
 \cite{segmentation-wiki}) and bioinformatics ({\em Smith-Waterman}
 \cite{smithwaterman-wiki}). Moreover, the aforementioned software applications have
 corresponding accelerator implementations which provide
@@ -431,7 +431,7 @@ the L1 cache. In this case, the accelerators and the CPUs share the L2 cache wit
 increases, the heterogeneous architecture benefits from the lower cache miss rate. 
 
 The accelerator's local buffer works in similar manner to the core's L1 cache. Thus, the characteristics of the accelerator local buffer 
-resemble the charactertics of the L1 cache as shown in Figure \ref{fig_acc_buffer_perf} and \ref{fig_acc_buffer_power}. 
+resemble the characteristics of the L1 cache as shown in Figure \ref{fig_acc_buffer_perf} and \ref{fig_acc_buffer_power}. 
 The only difference is that as we adjust the buffer size, the rate of change for the gains of the local buffer is larger 
 by comparison with the L1 cache. In this case the hardware implementation is more sensitive to the locality of the input data
  given that there is a higher level of data parallelism within the accelerators. 
@@ -441,9 +441,7 @@ system performance. As illustrated in Figure \ref{fig_benchmark-switching}, we t
  scheduling as the baseline since ``500 million cycles" is the setup in our experiment. The performance gain tends to decrease as 
 the benchmark inter-arrival time varies from 0 cycles to 1000 million cycles. When the inter-arrival time is set to 0 cycles, it becomes
  identical to the continuously arriving back-to-back workload. This figure demonstrates that the more frequent the change in the workload of 
-the benchmarks, the more\begin{flushright}
-
-\end{flushright} precise the profiling-prediction, and the larger the gains from the scheduling methods. The aforementiond gains
+the benchmarks, the more precise the profiling-prediction, and the larger the gains from the scheduling methods. The aforementioned gains
 are realized in spite of the increasing overhead due to accelerator reprogramming. In addition, as the inter-arrival time increases, 
 the difference in the performance gains increases when comparing the na\"{\i}ve scheduling methods with the other two methods. 
 In this case, the benefits of prediction decrease as the inter-arrival time becomes significantly large. However, both the bandwidth-first and
