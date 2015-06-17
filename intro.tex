@@ -13,7 +13,7 @@ various ASIC-based accelerators are utilized to improve single-thread performanc
 However, ASIC based on-chip accelerators do not respond well to
 emerging dynamic workloads where applications come and go either on
 demand or in an unpredictable manner. For example, the user of a smartphone may
-install or uninstall Apps at any time, leading to a changing mixture
+install or uninstall apps at any time, leading to a changing mixture
 of applications. A cloud computing platform such as Amazon EC2
 \cite{amazon-ec2} can execute a variety of workloads submitted at arbitrary points in time from a user's Virtual Machine (VM) 
  including the Web \cite{Chen:2012jo}, data mining \cite{ec2-datamining}, as well as DNA sequencing
@@ -22,7 +22,7 @@ or for certain workload mixes.  As a result, the static accelerators remain dorm
 culminating in the waste of silicon resources.
 
 A complementary approach consists of using off-chip programmable hardware
-accelerators such as a GPU along with an FPGA to speed up complex workloads
+accelerators such as GPUs and/or FPGAs to speed up complex workloads
 \cite{GPUFPGA, fpga-acc}. However, due to the nature of conventional system architectures, 
 such hardware acceleration units do not meet the stringent time requirements 
 of delay-sensitive workloads. The aforementioned units are typically
@@ -45,8 +45,8 @@ non-trivial undertaking given the prohibitive redevelopment costs.
 As new instructions are typically added to SoC
 accelerators, rewriting and recompiling the application's code is
 a requirement. Fine-grained accelerations also require compiler support \cite{Govindaraju:2012fn}. As the IPs for
-FPGAs and programs developed for GPUs continually increase, the more plausible it becomes
-to incorporate them through coarse-grained acceleration.  For example, an entire function, such as 3DES encryption,
+FPGAs and programs developed for GPUs continually increase, it becomes more plausible
+to incorporate them through coarse-grained acceleration. For example, an entire function, such as 3DES encryption,
 can be sped up as an element of an existing software library, such as libopenssl. A library based
 approach facilitates acceleration without incurring development or redevelopment costs. 
 
